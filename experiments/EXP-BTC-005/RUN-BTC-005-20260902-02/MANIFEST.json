@@ -1,0 +1,47 @@
+{
+  "CODE_COMMIT": "03306e70859b867750383d6e8c61950d5865e916",
+  "COMMAND": "python3 experiments/EXP-BTC-005/src/run_synthetic.py --run-id RUN-BTC-005-20260902-02",
+  "DUPLICATES": 0,
+  "ENDED_AT": "2026-09-02T13:41:00Z",
+  "ENVIRONMENT": {
+    "executable": "/usr/bin/python3",
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]"
+  },
+  "EXPERIMENT_ID": "EXP-BTC-005",
+  "GAPS": 1,
+  "INPUT_ROWS": 6,
+  "MECHANICAL_GATE": "PASS",
+  "OUTPUT_FILES": [
+    {
+      "path": "outputs/SYNTHETIC_RETURNS.csv",
+      "sha256": "919a80c3148fbdbc13935871e7c67d8761bee29e8ecf939a92ca042c013e6bab"
+    },
+    {
+      "path": "outputs/SYNTHETIC_GAPS.csv",
+      "sha256": "e5b4a65c34225c36f052f1dfda0fccaefb4d6deb97018968edfbefa8db78cb79"
+    },
+    {
+      "path": "result/RESULT.json",
+      "sha256": "3199e508cc1a868d31bb28db453a206d11c572351c57d9f52dbc560da4c2c7e9"
+    }
+  ],
+  "PROCESSED_DATA_HASH": null,
+  "PROCESSED_DATA_ID": null,
+  "RANDOM_SEED": null,
+  "RAW_DATA_HASH": "44f72413970da754428e887cfd068e26866f8e2058b17c4b42abab4b1350bffd",
+  "RAW_DATA_ID": "tests/fixtures/e02_gap_hours.csv",
+  "RUN_ID": "RUN-BTC-005-20260902-02",
+  "SPEC_HASH": "b17c120b015632167b5663d603f757cff8d8c878410a8ff5b6c60b5514697ff4",
+  "STARTED_AT": "2026-09-02T13:41:00Z",
+  "TESTS": "python3 -m unittest tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids tests.test_r0c_code_commit_contains_harness tests.test_r0c_commit_a_repro -v",
+  "WARNINGS": [],
+  "hash_contract_files": [
+    "outputs/SYNTHETIC_RETURNS.csv",
+    "outputs/SYNTHETIC_GAPS.csv",
+    "result/RESULT.json"
+  ],
+  "hash_contract_note": "Byte-identical contract covers SYNTHETIC_RETURNS.csv, SYNTHETIC_GAPS.csv, RESULT.json only. STARTED_AT/ENDED_AT, CODE_COMMIT, and ENVIRONMENT may differ across machines.",
+  "not_a_trading_edge": true,
+  "role": "REPRODUCIBILITY_HARNESS"
+}
