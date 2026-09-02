@@ -168,7 +168,9 @@ class ExtC02ReproducibilityTests(unittest.TestCase):
             text=True,
         )
         self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
-        report = json.loads(proc.stdout)
+        json_start = proc.stdout.find("{")
+        self.assertGreaterEqual(json_start, 0, msg=proc.stdout + proc.stderr)
+        report = json.loads(proc.stdout[json_start:])
         self.assertEqual(report["MECHANICAL_GATE"], "PASS")
         self.assertEqual(report["mismatches"], [])
         expected = output_hash_map(self.manifest)

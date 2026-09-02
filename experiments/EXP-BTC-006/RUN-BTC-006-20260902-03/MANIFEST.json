@@ -1,0 +1,62 @@
+{
+  "CODE_COMMIT": "e46b0a9ad0574a199bf59855220014cd5ab8acc9",
+  "COMMAND": "python3 experiments/EXP-BTC-006/src/run_ext_c02.py --run-id RUN-BTC-006-20260902-03",
+  "DUPLICATES": 0,
+  "ENDED_AT": "2026-09-02T15:32:06Z",
+  "ENVIRONMENT": {
+    "executable": "/usr/bin/python3",
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]"
+  },
+  "ERROR_ID": "E-02",
+  "EXPERIMENT_ID": "EXP-BTC-006",
+  "GAPS": 128,
+  "HYPOTHESIS_ID": "HYP-BTC-002",
+  "INPUT_ROWS": 78986,
+  "MECHANICAL_GATE": "PASS",
+  "OUTPUT_FILES": [
+    {
+      "path": "outputs/SIGNAL_IMPACT.csv",
+      "sha256": "999fa511c0618d65eb922260a6c381ce45d7cc88d587e540c0718e799c86a906"
+    },
+    {
+      "path": "outputs/RULE_IMPACT.csv",
+      "sha256": "7747eedd255934b05dde0a93b259e927661974449d9e5479e162fbd8353e7d2d"
+    },
+    {
+      "path": "outputs/FROZEN_TOP10_IMPACT.csv",
+      "sha256": "54bf32da134e887f48528010eb72e3c055d5edae54fd42b38c95abdf4c5f0e1f"
+    },
+    {
+      "path": "result/RESULT.json",
+      "sha256": "1d5b137d84da8b2934620228a20197bdfba3b3fee9116bcca87684555a52608c"
+    },
+    {
+      "path": "report/EXT_C02_E02_IMPACT.md",
+      "sha256": "058e9e868d502190e90f09db2ea64288af219b9ab17defd93fea067c412161a9"
+    }
+  ],
+  "PROCESSED_DATA_HASH": null,
+  "PROCESSED_DATA_ID": null,
+  "RANDOM_SEED": null,
+  "RAW_DATA_HASH": "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103",
+  "RAW_DATA_ID": "btc_tsmom_replication/btcusdt_1h.csv",
+  "RUN_ID": "RUN-BTC-006-20260902-03",
+  "SPEC_HASH": "039f0de9763fd5dbfb6dc57e603da21ebae09800ff857c32ed4415d9964aeddc",
+  "STARTED_AT": "2026-09-02T15:31:42Z",
+  "TASK_ID": "EXT-C02",
+  "TESTS": "python3 -m unittest tests.test_e02_exact_timestamp tests.test_temporal_invariants tests.test_data_audit_nonfinite tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids tests.test_r0c_code_commit_contains_harness tests.test_r0c_commit_a_repro tests.test_ext_c02_isolation tests.test_ext_c02_reproducibility -v",
+  "WARNINGS": [],
+  "does_not_authorize_capital": true,
+  "hash_contract_files": [
+    "outputs/SIGNAL_IMPACT.csv",
+    "outputs/RULE_IMPACT.csv",
+    "outputs/FROZEN_TOP10_IMPACT.csv",
+    "result/RESULT.json",
+    "report/EXT_C02_E02_IMPACT.md"
+  ],
+  "hash_contract_note": "Byte-identical contract covers SIGNAL_IMPACT.csv, RULE_IMPACT.csv, FROZEN_TOP10_IMPACT.csv, RESULT.json, EXT_C02_E02_IMPACT.md. STARTED_AT/ENDED_AT, CODE_COMMIT, and ENVIRONMENT may differ across machines.",
+  "materiality": "MATERIAL",
+  "mechanical_gate_is_separate_from_scientific_decision": true,
+  "not_a_trading_edge": true
+}

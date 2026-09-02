@@ -7,7 +7,7 @@
 | Field | Value |
 |---|---|
 | Stage | R0 — operating system |
-| Last closed Cursor task | R0-C-PROVENANCE-FIX |
+| Last closed Cursor task | EXT-C02 |
 | Next Cursor task | none until Valita names a TASK-ID |
 | Active computational experiment | none |
 | Active live alert | none |
@@ -18,4 +18,4 @@
 | PRICE-ONLY | current-phase restriction |
 | R0-H01 / E-18 alert utility | OPEN |
 | DATA_AUDIT | PASS — `data/catalog/results/DATA_AUDIT.json` (isfinite; SHA NOT_APPLICABLE; exact count deltas = 0) |
-| E-02 primitive | tested; Extreme rerun not done |
+| E-02 primitive | tested; EXT-C02 executed; EXT-H01 pending |
