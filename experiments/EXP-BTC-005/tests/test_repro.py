@@ -17,6 +17,7 @@ from run_synthetic import (  # noqa: E402
     CANONICAL_RUN_DIR,
     CANONICAL_RUN_ID,
     DATA_PATH,
+    EXP_DIR,
     EXPECTED_DATA_SHA256,
     FORBIDDEN_DATA,
     HASH_CONTRACT_FILES,
@@ -117,6 +118,55 @@ class SyntheticReproTests(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 2)
         self.assertIn("REFUSE overwrite", proc.stderr)
+
+    def test_verify_with_run_id_keeps_run01_green(self) -> None:
+        proc = subprocess.run(
+            [sys.executable, str(RUNNER), "--verify", "--run-id", CANONICAL_RUN_ID],
+            cwd=REPO,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+        report = json.loads(proc.stdout)
+        self.assertEqual(report["MECHANICAL_GATE"], "PASS")
+        self.assertEqual(report["RUN_ID"], CANONICAL_RUN_ID)
+        self.assertEqual(report["mismatches"], [])
+
+    def test_compute_hashes_matches_canonical_contract(self) -> None:
+        proc = subprocess.run(
+            [sys.executable, str(RUNNER), "--compute-hashes"],
+            cwd=REPO,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+        report = json.loads(proc.stdout)
+        expected = canonical_hashes()
+        for rel in HASH_CONTRACT_FILES:
+            self.assertEqual(report["observed"][rel], expected[rel], msg=rel)
+        self.assertEqual(report["data_sha256"], EXPECTED_DATA_SHA256)
+
+    def test_verify_against_each_existing_run_folder(self) -> None:
+        run_dirs = sorted(
+            p for p in EXP_DIR.glob("RUN-*") if (p / "MANIFEST.json").is_file()
+        )
+        self.assertTrue(run_dirs, msg="expected at least RUN-01")
+        for run_dir in run_dirs:
+            with self.subTest(run_id=run_dir.name):
+                proc = subprocess.run(
+                    [sys.executable, str(RUNNER), "--verify", "--run-id", run_dir.name],
+                    cwd=REPO,
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+                report = json.loads(proc.stdout)
+                self.assertEqual(report["MECHANICAL_GATE"], "PASS")
+                self.assertEqual(report["RUN_ID"], run_dir.name)
+                self.assertEqual(report["mismatches"], [])
 
 
 if __name__ == "__main__":
