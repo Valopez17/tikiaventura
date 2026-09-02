@@ -18,4 +18,4 @@
 | PRICE-ONLY | current-phase restriction |
 | R0-H01 / E-18 alert utility | OPEN |
 | DATA_AUDIT | PASS — `data/catalog/results/DATA_AUDIT.json` (isfinite; SHA NOT_APPLICABLE; exact count deltas = 0) |
-| E-02 primitive | tested; EXT-C02 executed; EXT-H01 pending |
+| E-02 | CLOSED — primitive tested; EXT-C02 executed; Valita closed after PR #3 merge |
