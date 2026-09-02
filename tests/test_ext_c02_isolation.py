@@ -29,11 +29,13 @@ from run_ext_c02 import (  # noqa: E402
     configs_identical_except_lookback_mode,
     economic_material,
     exact_behind_matches_primitive,
+    executable_take,
     expanding_quantiles,
     frozen_top10_ids,
     load_bars_csv,
     load_frozen_top10,
     make_config,
+    period_of,
     sha256_file,
     shared_config_dict,
     trailing_return_from_behind,
@@ -203,6 +205,33 @@ class ExtC02IsolationTests(unittest.TestCase):
         self.assertIsNotNone(latest)
         self.assertEqual(latest["lifecycle_status"], "INVALIDATED")
         self.assertEqual(latest["version"], "1")
+
+    def test_period_split_uses_calendar_timestamps_not_mixed_asi8_units(self) -> None:
+        ts = pd.DatetimeIndex(
+            pd.date_range("2021-12-31 23:00:00", periods=4, freq="h", tz="UTC")
+        )
+        periods = period_of(ts, make_config(LOOKBACK_MODE_A))
+        self.assertEqual(list(periods), ["discovery", "validation", "validation", "validation"])
+        ts2 = pd.DatetimeIndex(
+            pd.date_range("2024-12-31 23:00:00", periods=3, freq="h", tz="UTC")
+        )
+        periods2 = period_of(ts2, make_config(LOOKBACK_MODE_A))
+        self.assertEqual(list(periods2), ["validation", "recent", "recent"])
+
+    def test_executable_take_hold_is_six_hours_not_mixed_unit_asi8(self) -> None:
+        ts = pd.DatetimeIndex(
+            pd.date_range("2020-01-01 00:00:00", periods=20, freq="h", tz="UTC")
+        )
+        n = len(ts)
+        entry_idx = np.arange(n, dtype=np.int64)
+        valid = np.zeros(n, dtype=bool)
+        valid[0] = True
+        valid[5] = True  # entry 5h later: still inside the 6h hold
+        valid[6] = True  # entry exactly 6h later: same-bar exit/entry allowed (Phase 4)
+        take = executable_take(valid, entry_idx, ts, 6)
+        self.assertTrue(take[0])
+        self.assertFalse(take[5])
+        self.assertTrue(take[6])
 
 
 if __name__ == "__main__":

@@ -39,7 +39,6 @@ L6_CANDIDATE_ID = "L6_down_p1_rebound_long_H6"
 EXPECTED_DATASET_SHA256 = "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103"
 EXPECTED_RECTOR_SHA256 = "799cbfa8575ca5147a658bd85a5fab66d4a0c7ed4539296639d14cea88137778"
 CODE_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
-HOUR_NS = 3_600_000_000_000
 AUDIT_EXPANDING_N = 24
 PERIODS = ("discovery", "validation", "recent")
 
@@ -560,14 +559,28 @@ def frozen_top10_ids(rows: list[dict] | None = None) -> list[str]:
     return [r["rule_id"] for r in rows]
 
 
+def _utc_timestamp(value: str | pd.Timestamp) -> pd.Timestamp:
+    t = pd.Timestamp(value)
+    if t.tzinfo is None:
+        t = t.tz_localize("UTC")
+    else:
+        t = t.tz_convert("UTC")
+    return t
+
+
 def period_of(ts: pd.DatetimeIndex, cfg: FrozenConfig) -> np.ndarray:
+    """Split by calendar timestamp. Do not compare DatetimeIndex.asi8 to Timestamp.value:
+
+    pandas 3 indexes may be datetime64[us] (asi8 in microseconds) while Timestamp.value
+    stays nanoseconds, which would classify every bar as discovery.
+    """
+    ts = as_utc_index(ts)
+    disc = _utc_timestamp(cfg.disc_end_utc)
+    val = _utc_timestamp(cfg.val_end_utc)
     out = np.empty(len(ts), dtype=object)
-    ns = ts.asi8
-    disc = pd.Timestamp(cfg.disc_end_utc).value
-    val = pd.Timestamp(cfg.val_end_utc).value
-    out[ns < disc] = "discovery"
-    out[(ns >= disc) & (ns < val)] = "validation"
-    out[ns >= val] = "recent"
+    out[ts < disc] = "discovery"
+    out[(ts >= disc) & (ts < val)] = "validation"
+    out[ts >= val] = "recent"
     return out
 
 
@@ -600,17 +613,24 @@ def dist_stats(cond: np.ndarray, uncond: np.ndarray) -> dict:
     return out
 
 
-def executable_take(valid: np.ndarray, entry_idx: np.ndarray, ts_ns: np.ndarray, hold_h: int) -> np.ndarray:
+def executable_take(
+    valid: np.ndarray,
+    entry_idx: np.ndarray,
+    ts: pd.DatetimeIndex,
+    hold_h: int,
+) -> np.ndarray:
+    """Non-overlapping executable trades. Hold is elapsed calendar time, not mixed-unit asi8."""
     take = np.zeros(len(valid), dtype=bool)
-    busy_until = np.int64(-1)
-    hold_ns = np.int64(hold_h) * np.int64(HOUR_NS)
+    busy_until: pd.Timestamp | None = None
+    hold = pd.Timedelta(hours=int(hold_h))
+    ts = as_utc_index(ts)
     for t in np.flatnonzero(valid):
         e_i = int(entry_idx[t])
-        e_ns = ts_ns[e_i]
-        if e_ns < busy_until:
+        e_ts = ts[e_i]
+        if busy_until is not None and e_ts < busy_until:
             continue
         take[t] = True
-        busy_until = e_ns + hold_ns
+        busy_until = e_ts + hold
     return take
 
 
@@ -671,7 +691,6 @@ def scan_arm(
     fwd_short: dict[int, np.ndarray],
     uncond: dict,
     span: dict[str, float],
-    ts_ns: np.ndarray,
 ) -> dict:
     if cfg.reselect_top:
         raise RuntimeError("reselect_top must remain False")
@@ -715,7 +734,7 @@ def scan_arm(
                         thesis = thesis_name(tail, direction)
                         fwd_s = fwd_long[h] if direction == "long" else fwd_short[h]
                         valid_event = has_exit & np.isfinite(fwd_s)
-                        take_all = executable_take(valid_event, entry_idx, ts_ns, int(h))
+                        take_all = executable_take(valid_event, entry_idx, ts, int(h))
                         for period in PERIODS:
                             ev = valid_event & (periods == period)
                             tk = take_all & (periods == period)
@@ -763,7 +782,6 @@ def build_shared_execution(df: pd.DataFrame, cfg: FrozenConfig) -> dict:
     n = len(df)
     opens = df["open"].to_numpy(dtype=float)
     closes = df["close"].to_numpy(dtype=float)
-    ts_ns = ts.asi8
     periods = period_of(ts, cfg)
     meta = df.attrs["meta"]
     span = {p: period_span_days(meta, p, cfg) for p in PERIODS}
@@ -793,7 +811,6 @@ def build_shared_execution(df: pd.DataFrame, cfg: FrozenConfig) -> dict:
         "n": n,
         "opens": opens,
         "closes": closes,
-        "ts_ns": ts_ns,
         "periods": periods,
         "span": span,
         "entry_idx": entry_idx,
@@ -1361,7 +1378,6 @@ def compute(data_path: Path, spec_path: Path) -> dict:
         shared["fwd_short"],
         shared["uncond"],
         shared["span"],
-        shared["ts_ns"],
     )
     log("scanning arm B EXACT_TIMESTAMP")
     arm_b = scan_arm(
@@ -1376,7 +1392,6 @@ def compute(data_path: Path, spec_path: Path) -> dict:
         shared["fwd_short"],
         shared["uncond"],
         shared["span"],
-        shared["ts_ns"],
     )
     impact = impact_tables(arm_a, arm_b, cfg_a, top_rows, shared["periods"])
     historical_l6 = load_historical_l6_label()
