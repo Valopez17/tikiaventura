@@ -7,7 +7,7 @@ OBJECTIVE: Register that RUN-BTC-005-20260902-01 MANIFEST.CODE_COMMIT does not c
 ## Commits (two-commit provenance; not inverted)
 
 - COMMIT_A (code, before RUN-02 execution): `03306e70859b867750383d6e8c61950d5865e916`
-- COMMIT_B (evidence): the git commit that introduces this receipt and `experiments/EXP-BTC-005/RUN-BTC-005-20260902-02/` (full SHA is `git rev-parse HEAD` after that commit; recorded in the PR body)
+- COMMIT_B (evidence): `9ee7dc402f36f396bf1f279d19ef54afe4a5767f`
 
 COMMIT_A contains: `experiments/EXP-BTC-005/SPEC.md`, `experiments/EXP-BTC-005/src/run_synthetic.py`, `tests/fixtures/e02_gap_hours.csv`, preventive test `tests/test_r0c_code_commit_contains_harness.py`, reproduction test `tests/test_r0c_commit_a_repro.py`, and E-23. COMMIT_A does not contain RUN-02 outputs.
 
