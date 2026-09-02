@@ -14,6 +14,7 @@ sys.path.insert(0, str(REPO))
 from temporal.exact_timestamp import (  # noqa: E402
     expanding_values_before_t,
     rolling_high_excluding_t,
+    rolling_low_excluding_t,
 )
 from temporal.trade_invariants import (  # noqa: E402
     build_trade,
@@ -79,6 +80,11 @@ class TemporalInvariantTests(unittest.TestCase):
         rh = rolling_high_excluding_t(self.highs, self.ts, self.t02, 2 * HOUR)
         self.assertEqual(rh, 120.0)  # max(00:00=110, 01:00=120); 02:00 high 130 excluded
         self.assertLess(rh, float(self.highs.loc[self.t02]))
+
+    def test_rolling_low_excludes_t(self) -> None:
+        rl = rolling_low_excluding_t(self.df["low"], self.ts, self.t02, 2 * HOUR)
+        self.assertEqual(rl, 90.0)  # min(00:00=90, 01:00=100); 02:00 low 107 excluded
+        self.assertGreater(float(self.df["low"].loc[self.t02]), rl)
 
     def test_expanding_percentile_no_future(self) -> None:
         hist = expanding_values_before_t(self.closes, self.ts, self.t02)

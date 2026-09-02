@@ -51,14 +51,21 @@
       "33": 1
     },
     "n_nonfinite_ohlc": 0,
+    "n_nan_ohlc": 0,
+    "n_posinf_ohlc": 0,
+    "n_neginf_ohlc": 0,
     "n_nonpositive_ohlc": 0,
     "n_high_lt_low": 0,
     "n_open_outside_low_high": 0,
     "n_close_outside_low_high": 0,
     "n_invalid_volume": 0,
+    "n_nonfinite_volume": 0,
+    "n_nan_volume": 0,
+    "n_posinf_volume": 0,
+    "n_neginf_volume": 0,
+    "n_negative_volume": 0,
     "last_row_timestamp_utc": "2026-08-26 13:00:00+00:00",
-    "last_row_ohlc_complete": true,
-    "units_observed": "prices float; volume float (base-asset units if Binance kline)"
+    "last_row_ohlc_complete": true
   },
   "DOCUMENTED_LEGACY_CLAIM": {
     "source": "Binance BTCUSDT Spot",
@@ -77,8 +84,28 @@
       "unique_and_ordered": true,
       "ohlc_valid": true,
       "missing_hours": true,
-      "sha256": false
+      "sha256": null
     }
+  },
+  "claim_comparison": {
+    "n_rows": {
+      "claimed": 78986,
+      "observed": 78986,
+      "delta": 0,
+      "match": true
+    },
+    "missing_hours": {
+      "claimed": 128,
+      "observed": 128,
+      "delta": 0,
+      "match": true
+    }
+  },
+  "sha256_comparison": {
+    "status": "NOT_APPLICABLE",
+    "legacy_recorded_value": "TBC",
+    "current_sha256": "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103",
+    "reason": "inherited claim recorded SHA-256 as TBC; no prior hash exists to compare"
   },
   "UNKNOWN": {
     "provider_endpoint": null,
@@ -86,11 +113,16 @@
     "request_parameters": null,
     "transform_code_commit": null,
     "inclusive_exclusive_download_window": null,
-    "whether_a_later_closed_bar_existed_at_retrieval": null
+    "whether_a_later_closed_bar_existed_at_retrieval": null,
+    "price_economic_units": null,
+    "volume_economic_units": null
   },
   "notes": [
     "Each CSV row is treated as a completed hourly bar (historical kline dump). That does not reconstruct retrieved_at.",
     "Naive timestamp_utc strings are interpreted as UTC clock time, not a local exchange timezone.",
-    "Gaps are missing expected hours on the UTC hourly grid from t_min to t_max inclusive. Prices were not imputed."
+    "Gaps are missing expected hours on the UTC hourly grid from t_min to t_max inclusive. Prices were not imputed.",
+    "Non-finite checks use numpy.isfinite (NaN, +inf, -inf). pandas.notna does not treat inf as missing.",
+    "KNOWN records observed columns and dtypes only. Economic units of price/volume are UNKNOWN.",
+    "SHA-256 comparison is NOT_APPLICABLE because the inherited claim was TBC, not a mismatch."
   ]
 }

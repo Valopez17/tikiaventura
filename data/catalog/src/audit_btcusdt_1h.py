@@ -8,6 +8,7 @@ import json
 from collections import Counter
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parents[3]
@@ -23,6 +24,7 @@ CLAIM_END = "2026-08-26 13:00:00"
 CLAIM_MISSING = 128
 CLAIM_SOURCE = "Binance BTCUSDT Spot"
 CLAIM_INTERVAL = "1h"
+CLAIM_SHA256 = "TBC"
 
 
 def sha256_file(path: Path) -> str:
@@ -31,6 +33,83 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _as_float_array(s: pd.Series) -> np.ndarray:
+    return np.asarray(s, dtype=float)
+
+
+def finiteness_breakdown(arr: np.ndarray) -> dict[str, int]:
+    """Row-or-element counts using real finiteness, not pandas notna()."""
+    a = np.asarray(arr, dtype=float)
+    return {
+        "n_nonfinite": int(np.count_nonzero(~np.isfinite(a))),
+        "n_nan": int(np.count_nonzero(np.isnan(a))),
+        "n_posinf": int(np.count_nonzero(np.isposinf(a))),
+        "n_neginf": int(np.count_nonzero(np.isneginf(a))),
+    }
+
+
+def ohlc_volume_validity(df: pd.DataFrame) -> dict:
+    """Validity counters. Non-finite = NaN / +inf / -inf via numpy.isfinite."""
+    o = _as_float_array(df["open"])
+    h = _as_float_array(df["high"])
+    low = _as_float_array(df["low"])
+    c = _as_float_array(df["close"])
+    ohlc = np.column_stack([o, h, low, c])
+    row_finite = np.isfinite(ohlc).all(axis=1)
+    ohlc_break = {
+        "n_nonfinite_ohlc": int(np.count_nonzero(~row_finite)),
+        "n_nan_ohlc": int(np.count_nonzero(np.isnan(ohlc).any(axis=1))),
+        "n_posinf_ohlc": int(np.count_nonzero(np.isposinf(ohlc).any(axis=1))),
+        "n_neginf_ohlc": int(np.count_nonzero(np.isneginf(ohlc).any(axis=1))),
+    }
+    n_nonpositive = int(np.count_nonzero(row_finite & ((o <= 0) | (h <= 0) | (low <= 0) | (c <= 0))))
+    n_high_lt_low = int(np.count_nonzero(row_finite & (h < low)))
+    n_open_out = int(np.count_nonzero(row_finite & ((o < low) | (o > h))))
+    n_close_out = int(np.count_nonzero(row_finite & ((c < low) | (c > h))))
+
+    vol_out: dict = {
+        "n_invalid_volume": None,
+        "n_nonfinite_volume": None,
+        "n_nan_volume": None,
+        "n_posinf_volume": None,
+        "n_neginf_volume": None,
+        "n_negative_volume": None,
+    }
+    if "volume" in df.columns:
+        v = _as_float_array(df["volume"])
+        v_finite = np.isfinite(v)
+        vb = finiteness_breakdown(v)
+        n_neg = int(np.count_nonzero(v_finite & (v < 0)))
+        vol_out = {
+            "n_invalid_volume": int(vb["n_nonfinite"] + n_neg),
+            "n_nonfinite_volume": vb["n_nonfinite"],
+            "n_nan_volume": vb["n_nan"],
+            "n_posinf_volume": vb["n_posinf"],
+            "n_neginf_volume": vb["n_neginf"],
+            "n_negative_volume": n_neg,
+        }
+
+    return {
+        **ohlc_break,
+        "n_nonpositive_ohlc": n_nonpositive,
+        "n_high_lt_low": n_high_lt_low,
+        "n_open_outside_low_high": n_open_out,
+        "n_close_outside_low_high": n_close_out,
+        **vol_out,
+    }
+
+
+def last_row_ohlc_complete(row: pd.Series) -> bool:
+    o = float(row["open"])
+    h = float(row["high"])
+    low = float(row["low"])
+    c = float(row["close"])
+    vals = np.array([o, h, low, c], dtype=float)
+    if not bool(np.isfinite(vals).all()):
+        return False
+    return o > 0 and h > 0 and low > 0 and c > 0 and h >= low and low <= o <= h and low <= c <= h
 
 
 def main() -> int:
@@ -49,19 +128,13 @@ def main() -> int:
     n_unparsed = int(ts.isna().sum())
     naive_has_z = bool(df["timestamp_utc"].astype(str).str.contains("Z|\\+", regex=True).any())
 
-    o = df["open"].astype(float)
-    h = df["high"].astype(float)
-    low = df["low"].astype(float)
-    c = df["close"].astype(float)
-    vol = df["volume"].astype(float) if "volume" in df.columns else None
-
-    finite_ohlc = o.notna() & h.notna() & low.notna() & c.notna()
-    n_nonfinite_ohlc = int((~finite_ohlc).sum())
-    n_nonpositive = int(((o <= 0) | (h <= 0) | (low <= 0) | (c <= 0)).sum())
-    n_high_lt_low = int((h < low).sum())
-    n_open_out = int(((o < low) | (o > h)).sum()) if n else 0
-    n_close_out = int(((c < low) | (c > h)).sum()) if n else 0
-    n_vol_invalid = int((~vol.notna() | (vol < 0)).sum()) if vol is not None else None
+    validity = ohlc_volume_validity(df)
+    n_nonfinite_ohlc = validity["n_nonfinite_ohlc"]
+    n_nonpositive = validity["n_nonpositive_ohlc"]
+    n_high_lt_low = validity["n_high_lt_low"]
+    n_open_out = validity["n_open_outside_low_high"]
+    n_close_out = validity["n_close_outside_low_high"]
+    n_vol_invalid = validity["n_invalid_volume"]
 
     unique = bool(ts.nunique(dropna=False) == n and n_unparsed == 0)
     chrono = bool(ts.is_monotonic_increasing) and unique
@@ -73,11 +146,11 @@ def main() -> int:
     observed = pd.DatetimeIndex(ts)
     missing = expected.difference(observed)
     extra = observed.difference(expected)
+    n_missing = int(len(missing))
 
     gaps = []
     if len(missing):
         miss = pd.DatetimeIndex(missing)
-        # consecutive missing hours → runs
         hour = pd.Timedelta(hours=1)
         run_start = miss[0]
         prev = miss[0]
@@ -93,9 +166,9 @@ def main() -> int:
         gaps.append((run_start, prev, n_h))
 
     gap_rows = []
+    hour = pd.Timedelta(hours=1)
     for start, end, n_h in gaps:
         t = start
-        hour = pd.Timedelta(hours=1)
         while t <= end:
             gap_rows.append(
                 {
@@ -109,46 +182,52 @@ def main() -> int:
 
     length_dist = Counter(int(g[2]) for g in gaps)
     last = df.iloc[-1]
-    last_ohlc_complete = bool(
-        pd.notna(last["open"])
-        and pd.notna(last["high"])
-        and pd.notna(last["low"])
-        and pd.notna(last["close"])
-        and float(last["open"]) > 0
-        and float(last["close"]) > 0
-        and float(last["high"]) >= float(last["low"])
-    )
+    last_complete = last_row_ohlc_complete(last)
 
     start_match = str(tmin.tz_convert("UTC").strftime("%Y-%m-%d %H:%M:%S")) == CLAIM_START
     end_match = str(tmax.tz_convert("UTC").strftime("%Y-%m-%d %H:%M:%S")) == CLAIM_END
     n_match = n == CLAIM_N
-    miss_match = int(len(missing)) == CLAIM_MISSING
+    miss_match = n_missing == CLAIM_MISSING
+    n_rows_delta = int(n - CLAIM_N)
+    missing_hours_delta = int(n_missing - CLAIM_MISSING)
 
-    stop = False
-    stop_reasons = []
+    corruption = []
     if n_dup_ts > 0:
-        stop = True
-        stop_reasons.append("duplicate timestamps")
+        corruption.append("duplicate timestamps")
     if n_unparsed > 0 or not chrono:
-        stop = True
-        stop_reasons.append("timestamp parse/order failure")
+        corruption.append("timestamp parse/order failure")
     if n_nonfinite_ohlc or n_nonpositive or n_high_lt_low or n_open_out or n_close_out:
-        stop = True
-        stop_reasons.append("OHLC corruption")
-    if vol is not None and n_vol_invalid:
-        stop = True
-        stop_reasons.append("invalid volume")
-    if not n_match or not miss_match:
-        # row/gap count mismatch is documented; only stop if large
-        if abs(n - CLAIM_N) > 1 or abs(int(len(missing)) - CLAIM_MISSING) > 5:
-            stop = True
-            stop_reasons.append("material count mismatch vs inherited claim")
+        corruption.append("OHLC corruption")
+    if n_vol_invalid:
+        corruption.append("invalid volume")
+
+    claim_mismatch = []
+    if not n_match:
+        claim_mismatch.append(f"n_rows mismatch claimed={CLAIM_N} observed={n} delta={n_rows_delta}")
+    if not miss_match:
+        claim_mismatch.append(
+            f"missing_hours mismatch claimed={CLAIM_MISSING} observed={n_missing} delta={missing_hours_delta}"
+        )
+
+    if corruption:
+        gate = "FAIL"
+        stop_reasons = corruption + claim_mismatch
+    elif claim_mismatch:
+        gate = "BLOCKED"
+        stop_reasons = claim_mismatch
+    else:
+        gate = "PASS"
+        stop_reasons = []
+
+    ohlc_valid = not (
+        n_nonfinite_ohlc or n_nonpositive or n_high_lt_low or n_open_out or n_close_out
+    )
 
     audit = {
         "spec": str(SPEC.relative_to(REPO)),
         "dataset_id": "BTCUSDT_SPOT_1H_LEGACY",
         "path": str(SRC.relative_to(REPO)),
-        "mechanical_gate": "FAIL" if stop else "PASS",
+        "mechanical_gate": gate,
         "stop_reasons": stop_reasons,
         "KNOWN": {
             "sha256": sha,
@@ -169,19 +248,26 @@ def main() -> int:
             "chronological": chrono,
             "n_duplicate_timestamps": n_dup_ts,
             "n_expected_hourly_bars_inclusive": int(len(expected)),
-            "n_missing_hours": int(len(missing)),
+            "n_missing_hours": n_missing,
             "n_unexpected_timestamps": int(len(extra)),
             "n_gap_runs": int(len(gaps)),
             "gap_length_hours_distribution": {str(k): int(v) for k, v in sorted(length_dist.items())},
             "n_nonfinite_ohlc": n_nonfinite_ohlc,
+            "n_nan_ohlc": validity["n_nan_ohlc"],
+            "n_posinf_ohlc": validity["n_posinf_ohlc"],
+            "n_neginf_ohlc": validity["n_neginf_ohlc"],
             "n_nonpositive_ohlc": n_nonpositive,
             "n_high_lt_low": n_high_lt_low,
             "n_open_outside_low_high": int(n_open_out),
             "n_close_outside_low_high": int(n_close_out),
             "n_invalid_volume": n_vol_invalid,
+            "n_nonfinite_volume": validity["n_nonfinite_volume"],
+            "n_nan_volume": validity["n_nan_volume"],
+            "n_posinf_volume": validity["n_posinf_volume"],
+            "n_neginf_volume": validity["n_neginf_volume"],
+            "n_negative_volume": validity["n_negative_volume"],
             "last_row_timestamp_utc": str(ts.iloc[-1]),
-            "last_row_ohlc_complete": last_ohlc_complete,
-            "units_observed": "prices float; volume float (base-asset units if Binance kline)",
+            "last_row_ohlc_complete": last_complete,
         },
         "DOCUMENTED_LEGACY_CLAIM": {
             "source": CLAIM_SOURCE,
@@ -192,18 +278,36 @@ def main() -> int:
             "unique_and_ordered": True,
             "ohlc_valid": True,
             "missing_hours": CLAIM_MISSING,
-            "sha256": "TBC",
+            "sha256": CLAIM_SHA256,
             "reproduced": {
                 "n_bars": n_match,
                 "t_min": start_match,
                 "t_max": end_match,
                 "unique_and_ordered": unique and chrono,
-                "ohlc_valid": not (
-                    n_nonfinite_ohlc or n_nonpositive or n_high_lt_low or n_open_out or n_close_out
-                ),
+                "ohlc_valid": ohlc_valid,
                 "missing_hours": miss_match,
-                "sha256": False,
+                "sha256": None,
             },
+        },
+        "claim_comparison": {
+            "n_rows": {
+                "claimed": CLAIM_N,
+                "observed": n,
+                "delta": n_rows_delta,
+                "match": n_match,
+            },
+            "missing_hours": {
+                "claimed": CLAIM_MISSING,
+                "observed": n_missing,
+                "delta": missing_hours_delta,
+                "match": miss_match,
+            },
+        },
+        "sha256_comparison": {
+            "status": "NOT_APPLICABLE",
+            "legacy_recorded_value": CLAIM_SHA256,
+            "current_sha256": sha,
+            "reason": "inherited claim recorded SHA-256 as TBC; no prior hash exists to compare",
         },
         "UNKNOWN": {
             "provider_endpoint": None,
@@ -212,18 +316,36 @@ def main() -> int:
             "transform_code_commit": None,
             "inclusive_exclusive_download_window": None,
             "whether_a_later_closed_bar_existed_at_retrieval": None,
+            "price_economic_units": None,
+            "volume_economic_units": None,
         },
         "notes": [
             "Each CSV row is treated as a completed hourly bar (historical kline dump). That does not reconstruct retrieved_at.",
             "Naive timestamp_utc strings are interpreted as UTC clock time, not a local exchange timezone.",
             "Gaps are missing expected hours on the UTC hourly grid from t_min to t_max inclusive. Prices were not imputed.",
+            "Non-finite checks use numpy.isfinite (NaN, +inf, -inf). pandas.notna does not treat inf as missing.",
+            "KNOWN records observed columns and dtypes only. Economic units of price/volume are UNKNOWN.",
+            "SHA-256 comparison is NOT_APPLICABLE because the inherited claim was TBC, not a mismatch.",
         ],
     }
 
     AUDIT_JSON.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
     pd.DataFrame(gap_rows).to_csv(GAP_CSV, index=False)
-    print(json.dumps({"gate": audit["mechanical_gate"], "sha256": sha, "n_rows": n, "n_missing": int(len(missing)), "stop": stop_reasons}, indent=2))
-    return 1 if stop else 0
+    print(
+        json.dumps(
+            {
+                "gate": audit["mechanical_gate"],
+                "sha256": sha,
+                "n_rows": n,
+                "n_missing": n_missing,
+                "n_rows_delta": n_rows_delta,
+                "missing_hours_delta": missing_hours_delta,
+                "stop": stop_reasons,
+            },
+            indent=2,
+        )
+    )
+    return 1 if gate != "PASS" else 0
 
 
 if __name__ == "__main__":

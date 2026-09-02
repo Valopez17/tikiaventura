@@ -83,6 +83,18 @@ def rolling_high_excluding_t(
     return float(high.iloc[idxs].max())
 
 
+def rolling_low_excluding_t(
+    low: pd.Series,
+    ts: pd.DatetimeIndex,
+    t: pd.Timestamp,
+    lookback: pd.Timedelta,
+) -> float | None:
+    idxs = window_indices_excluding_t(ts, t, lookback, require_complete=True)
+    if not idxs:
+        return None
+    return float(low.iloc[idxs].min())
+
+
 def expanding_values_before_t(values: pd.Series, ts: pd.DatetimeIndex, t: pd.Timestamp) -> pd.Series:
     """Observations with timestamp strictly before t (no lookahead)."""
     ts = as_utc_index(ts)
