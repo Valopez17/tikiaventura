@@ -63,13 +63,21 @@ No historical RUN-IDs invented for the four families. No numbers copied into new
 
 ## Tests
 
+Commands:
+
 ```
 python3 -m unittest tests.test_e02_exact_timestamp tests.test_temporal_invariants tests.test_data_audit_nonfinite tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids -v
 python3 registries/validate_registries.py
 python3 experiments/EXP-BTC-005/src/run_synthetic.py --verify
 ```
 
-Existing 25 tests must remain OK. New tests cover the hash contract and legacy ID labels.
+Results (this environment; pandas/numpy installed to run the inherited suite):
+
+- unittest: 38 OK (25 inherited + 6 synthetic hash-contract + 7 legacy-ID)
+- `validate_registries.py`: OK 6 schemas, 52 records
+- `--verify`: MECHANICAL_GATE PASS; output SHA-256 matched canonical
+- rector SHA-256 after task: `799cbfa8575ca5147a658bd85a5fab66d4a0c7ed4539296639d14cea88137778` (unchanged)
+- live 1h CSV SHA-256 unchanged: `77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103`
 
 ## Mechanical notes
 
