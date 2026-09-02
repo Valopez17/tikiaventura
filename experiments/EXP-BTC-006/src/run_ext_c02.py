@@ -15,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -1572,12 +1573,11 @@ def output_hashes_from_run(run_id: str) -> dict[str, str]:
     return {item["path"]: item["sha256"] for item in manifest["OUTPUT_FILES"]}
 
 
-def observe_hash_contract() -> tuple[dict, dict[str, str]]:
+def observe_hash_contract(run_id: str) -> tuple[dict, dict[str, str]]:
     computed = compute(REPO / DATASET_REL, SPEC_PATH)
-    tmp = Path("/tmp") / f"exp-btc-006-observe-{utc_now_iso().replace(':', '')}"
-    tmp.mkdir(parents=True, exist_ok=False)
+    tmp = Path(tempfile.mkdtemp(prefix="exp-btc-006-observe-"))
     try:
-        hashes = write_run_tree(tmp, "OBSERVE", computed)
+        hashes = write_run_tree(tmp, run_id, computed)
         return computed, hashes
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -1585,7 +1585,7 @@ def observe_hash_contract() -> tuple[dict, dict[str, str]]:
 
 def verify(run_id: str) -> int:
     started = utc_now_iso()
-    computed, hashes = observe_hash_contract()
+    computed, hashes = observe_hash_contract(run_id)
     expected = output_hashes_from_run(run_id)
     mismatches = []
     for rel in HASH_CONTRACT_FILES:
