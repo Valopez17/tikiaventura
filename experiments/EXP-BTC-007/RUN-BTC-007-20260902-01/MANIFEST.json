@@ -1,0 +1,87 @@
+{
+  "CODE_COMMIT": "cf044946095da78a4f50720fdefa72412a3e814c",
+  "CODE_COMMIT_IS_EXT_C05": true,
+  "COMMAND": "python3 experiments/EXP-BTC-007/src/run_h1_survivor_audit.py --run-id RUN-BTC-007-20260902-01",
+  "DISPOSITION": "FREEZE_PROSPECTIVE_RECOMMENDED",
+  "DUPLICATES": 0,
+  "ENDED_AT": "2026-09-02T16:26:43Z",
+  "ENVIRONMENT": {
+    "executable": "/usr/bin/python3",
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]"
+  },
+  "EXPERIMENT_ID": "EXP-BTC-007",
+  "GAPS": 128,
+  "HYPOTHESIS_ID": "HYP-BTC-002",
+  "INPUT_ROWS": 78986,
+  "MECHANICAL_GATE": "PASS",
+  "OUTPUT_FILES": [
+    {
+      "path": "outputs/TRADES.csv",
+      "sha256": "eb1c54a5e7e390f5a7bb743497ac9c26f3c107971f6240402c0093cf4c09570e"
+    },
+    {
+      "path": "outputs/PERIOD_METRICS.csv",
+      "sha256": "2e99f85cbff25cd666e1db76485aa350f7837c54243698775baef8e4cf882f68"
+    },
+    {
+      "path": "outputs/YEARLY_METRICS.csv",
+      "sha256": "f5c7f6338446487899827d4c4d4f9712a61a21656246b23c0c6b9d6e7b17f6e9"
+    },
+    {
+      "path": "outputs/UNCERTAINTY.csv",
+      "sha256": "c051bd7b246b06e021407aa305c8c4a22b33587e5ae64bc46441a634c2261c0e"
+    },
+    {
+      "path": "result/RESULT.json",
+      "sha256": "d329ce9a11924f60c24b1b5e0ee1c4a3dd7cf9baed7ec492c11a2edc05f8a3db"
+    },
+    {
+      "path": "report/H1_L6_SURVIVOR_AUDIT.md",
+      "sha256": "17213428d598e923a9bbb03fb761596bb5c96033eaef042d8f97b67aa365437b"
+    }
+  ],
+  "PROCESSED_DATA_HASH": null,
+  "PROCESSED_DATA_ID": null,
+  "RANDOM_SEED": {
+    "bootstrap": 0,
+    "expanding_audit": 0
+  },
+  "RAW_DATA_HASH": "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103",
+  "RAW_DATA_ID": "btc_tsmom_replication/btcusdt_1h.csv",
+  "RUN_ID": "RUN-BTC-007-20260902-01",
+  "SPEC_HASH": "d90a1fc844cb966431723cae7966c28895d93bb853a797bfa340d6e109a5992d",
+  "STARTED_AT": "2026-09-02T16:25:08Z",
+  "TASK_IDS": [
+    "EXT-C03",
+    "EXT-C04",
+    "EXT-C05",
+    "EXT-C06"
+  ],
+  "TESTS": "python3 -m unittest tests.test_e02_exact_timestamp tests.test_temporal_invariants tests.test_data_audit_nonfinite tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids tests.test_r0c_code_commit_contains_harness tests.test_r0c_commit_a_repro tests.test_ext_c02_isolation tests.test_ext_c02_reproducibility tests.test_ext_c04_h1_gate tests.test_ext_c05_h1_mtm -v",
+  "TESTS_EVIDENCE": {
+    "command": "python3 -m unittest tests.test_e02_exact_timestamp tests.test_temporal_invariants tests.test_data_audit_nonfinite tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids tests.test_r0c_code_commit_contains_harness tests.test_r0c_commit_a_repro tests.test_ext_c02_isolation tests.test_ext_c02_reproducibility tests.test_ext_c04_h1_gate tests.test_ext_c05_h1_mtm -v",
+    "elapsed_s": 129.028,
+    "exit_code": 0,
+    "failed": 0,
+    "log_path": "experiments/EXP-BTC-007/RUN-BTC-007-20260902-01/tests_log.txt",
+    "log_sha256": "5cc6658fbf8129c2fee4b66c7049018a35741c50d9378edae2b828625f33b3c2",
+    "passed": 101,
+    "ran": 101,
+    "skipped": 0
+  },
+  "WARNINGS": [],
+  "does_not_authorize_capital": true,
+  "hash_contract_files": [
+    "outputs/TRADES.csv",
+    "outputs/PERIOD_METRICS.csv",
+    "outputs/YEARLY_METRICS.csv",
+    "outputs/UNCERTAINTY.csv",
+    "result/RESULT.json",
+    "report/H1_L6_SURVIVOR_AUDIT.md"
+  ],
+  "hash_contract_note": "Byte-identical contract covers TRADES.csv, PERIOD_METRICS.csv, YEARLY_METRICS.csv, UNCERTAINTY.csv, RESULT.json, H1_L6_SURVIVOR_AUDIT.md. STARTED_AT/ENDED_AT, CODE_COMMIT, ENVIRONMENT, and TESTS_EVIDENCE may differ across machines.",
+  "mechanical_gate_is_separate_from_scientific_decision": true,
+  "not_a_trading_edge": true,
+  "not_clean_oos": true
+}

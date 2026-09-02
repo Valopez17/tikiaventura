@@ -1,0 +1,159 @@
+test_exact_lookback_one_hour_from_04_ineligible (tests.test_e02_exact_timestamp.E02ExactTimestampTests.test_exact_lookback_one_hour_from_04_ineligible) ... ok
+test_exact_lookback_two_hours_from_04_is_02 (tests.test_e02_exact_timestamp.E02ExactTimestampTests.test_exact_lookback_two_hours_from_04_is_02) ... ok
+test_gap_exists_at_03 (tests.test_e02_exact_timestamp.E02ExactTimestampTests.test_gap_exists_at_03) ... ok
+test_legacy_row_offset_fails_two_hour_lookback_across_gap (tests.test_e02_exact_timestamp.E02ExactTimestampTests.test_legacy_row_offset_fails_two_hour_lookback_across_gap) ... ok
+test_no_nearest_bar_fallback (tests.test_e02_exact_timestamp.E02ExactTimestampTests.test_no_nearest_bar_fallback) ... ok
+test_block_boundary_rejects_exit_on_boundary (tests.test_temporal_invariants.TemporalInvariantTests.test_block_boundary_rejects_exit_on_boundary) ... ok
+test_entry_strictly_after_signal (tests.test_temporal_invariants.TemporalInvariantTests.test_entry_strictly_after_signal) ... ok
+test_exit_exact_timestamp (tests.test_temporal_invariants.TemporalInvariantTests.test_exit_exact_timestamp) ... ok
+test_expanding_percentile_no_future (tests.test_temporal_invariants.TemporalInvariantTests.test_expanding_percentile_no_future) ... ok
+test_fees_unchanged_by_timestamp_lookup (tests.test_temporal_invariants.TemporalInvariantTests.test_fees_unchanged_by_timestamp_lookup) ... ok
+test_lookback_with_gap_ineligible_for_incomplete_window (tests.test_temporal_invariants.TemporalInvariantTests.test_lookback_with_gap_ineligible_for_incomplete_window) ... ok
+test_missing_entry_omits_trade (tests.test_temporal_invariants.TemporalInvariantTests.test_missing_entry_omits_trade) ... ok
+test_missing_exit_omits_trade (tests.test_temporal_invariants.TemporalInvariantTests.test_missing_exit_omits_trade) ... ok
+test_rolling_high_excludes_t (tests.test_temporal_invariants.TemporalInvariantTests.test_rolling_high_excludes_t) ... ok
+test_rolling_low_excludes_t (tests.test_temporal_invariants.TemporalInvariantTests.test_rolling_low_excludes_t) ... ok
+test_signal_uses_only_information_up_to_t (tests.test_temporal_invariants.TemporalInvariantTests.test_signal_uses_only_information_up_to_t) ... ok
+test_finite_row_not_flagged_by_itself (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_finite_row_not_flagged_by_itself) ... ok
+test_fixture_counts_expected (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_fixture_counts_expected) ... ok
+test_last_row_inf_is_not_complete (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_last_row_inf_is_not_complete) ... ok
+test_minus_inf_high_counted_nonfinite (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_minus_inf_high_counted_nonfinite) ... ok
+test_minus_inf_volume_invalid (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_minus_inf_volume_invalid) ... ok
+test_nan_close_counted_nonfinite (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_nan_close_counted_nonfinite) ... ok
+test_notna_misses_inf_isfinite_does_not (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_notna_misses_inf_isfinite_does_not) ... ok
+test_plus_inf_open_counted_nonfinite (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_plus_inf_open_counted_nonfinite) ... ok
+test_plus_inf_volume_invalid (tests.test_data_audit_nonfinite.NonfiniteAuditTests.test_plus_inf_volume_invalid) ... ok
+test_canonical_run_id_and_manifest_appendix_c_fields (test_repro.SyntheticReproTests.test_canonical_run_id_and_manifest_appendix_c_fields) ... ok
+test_compute_hashes_matches_canonical_contract (test_repro.SyntheticReproTests.test_compute_hashes_matches_canonical_contract) ... ok
+test_does_not_use_live_1h_csv (test_repro.SyntheticReproTests.test_does_not_use_live_1h_csv) ... ok
+test_fixture_hash_is_the_declared_one (test_repro.SyntheticReproTests.test_fixture_hash_is_the_declared_one) ... ok
+test_in_process_write_matches_canonical_output_hashes (test_repro.SyntheticReproTests.test_in_process_write_matches_canonical_output_hashes) ... ok
+test_refuse_overwrite_of_canonical_run (test_repro.SyntheticReproTests.test_refuse_overwrite_of_canonical_run) ... ok
+test_third_party_verify_command_exit_zero (test_repro.SyntheticReproTests.test_third_party_verify_command_exit_zero) ... ok
+test_verify_against_each_existing_run_folder (test_repro.SyntheticReproTests.test_verify_against_each_existing_run_folder) ... ok
+test_verify_with_run_id_keeps_run01_green (test_repro.SyntheticReproTests.test_verify_with_run_id_keeps_run01_green) ... ok
+test_breakout_not_promoted (tests.test_r0c_legacy_ids.LegacyIdTests.test_breakout_not_promoted) ... ok
+test_calendar_labels_match_section_5_1 (tests.test_r0c_legacy_ids.LegacyIdTests.test_calendar_labels_match_section_5_1) ... ok
+test_extreme_labels_match_section_5_2 (tests.test_r0c_legacy_ids.LegacyIdTests.test_extreme_labels_match_section_5_2) ... ok
+test_four_families_have_hyp_and_exp_ids (tests.test_r0c_legacy_ids.LegacyIdTests.test_four_families_have_hyp_and_exp_ids) ... ok
+test_harness_is_not_an_edge (tests.test_r0c_legacy_ids.LegacyIdTests.test_harness_is_not_an_edge) ... ok
+test_no_invented_historical_run_ids_for_legacy_families (tests.test_r0c_legacy_ids.LegacyIdTests.test_no_invented_historical_run_ids_for_legacy_families) ... ok
+test_vol_not_found_not_invented (tests.test_r0c_legacy_ids.LegacyIdTests.test_vol_not_found_not_invented) ... ok
+test_e23_exists_and_names_run01 (tests.test_r0c_code_commit_contains_harness.CodeCommitContainsHarnessTests.test_e23_exists_and_names_run01) ... ok
+test_incident_sha_fails_containment_for_harness_paths (tests.test_r0c_code_commit_contains_harness.CodeCommitContainsHarnessTests.test_incident_sha_fails_containment_for_harness_paths)
+Negative check: 426ca78 exists but does not contain runner/spec. ... ok
+test_incident_sha_would_fail_if_used_on_a_new_run (tests.test_r0c_code_commit_contains_harness.CodeCommitContainsHarnessTests.test_incident_sha_would_fail_if_used_on_a_new_run)
+Same function new runs use: 426ca78 must not pass as a CODE_COMMIT. ... ok
+test_non_grandfathered_runs_code_commit_contains_harness (tests.test_r0c_code_commit_contains_harness.CodeCommitContainsHarnessTests.test_non_grandfathered_runs_code_commit_contains_harness) ... ok
+test_run01_is_the_known_incident_and_is_grandfathered (tests.test_r0c_code_commit_contains_harness.CodeCommitContainsHarnessTests.test_run01_is_the_known_incident_and_is_grandfathered) ... ok
+test_run02_hashes_match_run01_hash_contract (tests.test_r0c_commit_a_repro.CommitAReproTests.test_run02_hashes_match_run01_hash_contract)
+Reproduction must not change scientific outputs to obtain PASS. ... ok
+test_run02_reproduced_from_its_code_commit (tests.test_r0c_commit_a_repro.CommitAReproTests.test_run02_reproduced_from_its_code_commit) ... /usr/lib/python3.12/tarfile.py:2274: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+  warnings.warn(
+ok
+test_arm_configs_identical_except_lookback_mode (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_arm_configs_identical_except_lookback_mode) ... ok
+test_dataset_and_rector_sha_unchanged (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_dataset_and_rector_sha_unchanged) ... ok
+test_executable_take_hold_is_six_hours_not_mixed_unit_asi8 (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_executable_take_hold_is_six_hours_not_mixed_unit_asi8) ... ok
+test_expanding_percentiles_use_only_timestamps_before_t (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_expanding_percentiles_use_only_timestamps_before_t) ... ok
+test_frozen_top10_read_from_artifact_no_reselect (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_frozen_top10_read_from_artifact_no_reselect) ... ok
+test_gap_fixture_exact_arm_does_not_use_substitute_row (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_gap_fixture_exact_arm_does_not_use_substitute_row) ... ok
+test_hyp_btc_002_lifecycle_not_changed (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_hyp_btc_002_lifecycle_not_changed) ... ok
+test_period_split_uses_calendar_timestamps_not_mixed_asi8_units (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_period_split_uses_calendar_timestamps_not_mixed_asi8_units) ... ok
+test_phase4_and_phase4b_and_dataset_not_rewritten_by_this_tree (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_phase4_and_phase4b_and_dataset_not_rewritten_by_this_tree) ... ok
+test_predeclared_materiality_matches_phase4b_coding (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_predeclared_materiality_matches_phase4b_coding) ... ok
+test_regular_timestamp_fixture_arms_identical (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_regular_timestamp_fixture_arms_identical) ... ok
+test_required_harness_paths_exist_on_disk (tests.test_ext_c02_isolation.ExtC02IsolationTests.test_required_harness_paths_exist_on_disk) ... ok
+test_code_commit_archive_contains_harness_not_run (tests.test_ext_c02_reproducibility.ExtC02ReproducibilityTests.test_code_commit_archive_contains_harness_not_run) ... ok
+test_code_commit_contains_runner_spec_and_tests (tests.test_ext_c02_reproducibility.ExtC02ReproducibilityTests.test_code_commit_contains_runner_spec_and_tests) ... ok
+test_manifest_appendix_c_and_dataset_sha (tests.test_ext_c02_reproducibility.ExtC02ReproducibilityTests.test_manifest_appendix_c_and_dataset_sha) ... ok
+test_result_json_contract_fields (tests.test_ext_c02_reproducibility.ExtC02ReproducibilityTests.test_result_json_contract_fields) ... ok
+test_verify_reproduces_contracted_hashes (tests.test_ext_c02_reproducibility.ExtC02ReproducibilityTests.test_verify_reproduces_contracted_hashes) ... ok
+test_discard_discovery_cond_adv (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_discovery_cond_adv) ... ok
+test_discard_discovery_mean_net (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_discovery_mean_net) ... ok
+test_discard_recent_negative_when_n_ge_5 (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_recent_negative_when_n_ge_5) ... ok
+test_discard_validation_mean_net_or_adv (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_validation_mean_net_or_adv) ... ok
+test_discard_validation_mtm_sharpe_nonfinite_or_le0 (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_validation_mtm_sharpe_nonfinite_or_le0) ... ok
+test_discard_validation_n_lt_15 (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_discard_validation_n_lt_15) ... ok
+test_fifty_bps_is_not_a_gate_input (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_fifty_bps_is_not_a_gate_input) ... ok
+test_freeze_when_all_clauses_pass (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_freeze_when_all_clauses_pass) ... ok
+test_insufficient_bootstrap_pr_or_n (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_insufficient_bootstrap_pr_or_n) ... ok
+test_insufficient_val_20bps (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_insufficient_val_20bps) ... ok
+test_insufficient_year_clauses (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_insufficient_year_clauses) ... ok
+test_recent_n_lt_5_is_not_hard_fail_but_blocks_freeze (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_recent_n_lt_5_is_not_hard_fail_but_blocks_freeze) ... ok
+test_yearly_metrics_on_bundle (tests.test_ext_c04_h1_gate.DecisionGateBranchTests.test_yearly_metrics_on_bundle) ... ok
+test_hold_is_six_calendar_hours_from_entry_not_from_signal (tests.test_ext_c04_h1_gate.EntryExitNonOverlapTests.test_hold_is_six_calendar_hours_from_entry_not_from_signal) ... ok
+test_missing_entry_or_exit_skips_event (tests.test_ext_c04_h1_gate.EntryExitNonOverlapTests.test_missing_entry_or_exit_skips_event) ... ok
+test_nonoverlap_allows_entry_exactly_at_previous_exit (tests.test_ext_c04_h1_gate.EntryExitNonOverlapTests.test_nonoverlap_allows_entry_exactly_at_previous_exit) ... ok
+test_gap_fixture_missing_t_minus_6h_is_ineligible (tests.test_ext_c04_h1_gate.ExactTimestampIsolationTests.test_gap_fixture_missing_t_minus_6h_is_ineligible) ... ok
+test_no_nearest_bar_fill_across_gap_for_lookback_1_vs_6 (tests.test_ext_c04_h1_gate.ExactTimestampIsolationTests.test_no_nearest_bar_fill_across_gap_for_lookback_1_vs_6) ... ok
+test_regular_hours_exact_lookback_agrees_with_primitive (tests.test_ext_c04_h1_gate.ExactTimestampIsolationTests.test_regular_hours_exact_lookback_agrees_with_primitive) ... ok
+test_fee_algebra_all_four_costs (tests.test_ext_c04_h1_gate.FeeAndPeriodTests.test_fee_algebra_all_four_costs) ... ok
+test_period_boundaries_use_signal_timestamp (tests.test_ext_c04_h1_gate.FeeAndPeriodTests.test_period_boundaries_use_signal_timestamp) ... ok
+test_year_stability_flags (tests.test_ext_c04_h1_gate.FeeAndPeriodTests.test_year_stability_flags) ... ok
+test_dataset_and_rector_sha_unchanged (tests.test_ext_c04_h1_gate.FrozenIdentityTests.test_dataset_and_rector_sha_unchanged) ... ok
+test_frozen_identity_matches_phase4_and_ext_c02 (tests.test_ext_c04_h1_gate.FrozenIdentityTests.test_frozen_identity_matches_phase4_and_ext_c02) ... ok
+test_rule_id_formula_and_no_parameter_freedom (tests.test_ext_c04_h1_gate.FrozenIdentityTests.test_rule_id_formula_and_no_parameter_freedom) ... ok
+test_spec_sha_is_stable_file (tests.test_ext_c04_h1_gate.FrozenIdentityTests.test_spec_sha_is_stable_file) ... ok
+test_deterministic_under_seed_0 (tests.test_ext_c05_h1_mtm.BootstrapTests.test_deterministic_under_seed_0) ... ok
+test_insufficient_n_below_5 (tests.test_ext_c05_h1_mtm.BootstrapTests.test_insufficient_n_below_5) ... ok
+test_period_window_extends_through_exit_after_boundary (tests.test_ext_c05_h1_mtm.CrossBoundaryHoldTests.test_period_window_extends_through_exit_after_boundary) ... ok
+test_hash_contract_does_not_include_equity_csv (tests.test_ext_c05_h1_mtm.HarnessPresenceTests.test_hash_contract_does_not_include_equity_csv) ... ok
+test_required_paths_exist (tests.test_ext_c05_h1_mtm.HarnessPresenceTests.test_required_paths_exist) ... ok
+test_fee_split_product_equals_one_minus_fee_for_all_four_costs (tests.test_ext_c05_h1_mtm.MtmIntraTradeTests.test_fee_split_product_equals_one_minus_fee_for_all_four_costs) ... ok
+test_mtm_10bps_fee_split_on_fixture (tests.test_ext_c05_h1_mtm.MtmIntraTradeTests.test_mtm_10bps_fee_split_on_fixture) ... ok
+test_mtm_captures_intra_trade_drawdown_missed_by_trade_only_equity (tests.test_ext_c05_h1_mtm.MtmIntraTradeTests.test_mtm_captures_intra_trade_drawdown_missed_by_trade_only_equity) ... ok
+test_source_never_hardcodes_unmodified_true (tests.test_ext_c05_h1_mtm.ReproducibilitySkipUntilRunTests.test_source_never_hardcodes_unmodified_true) ... ok
+test_verify_three_way_or_skip (tests.test_ext_c05_h1_mtm.ReproducibilitySkipUntilRunTests.test_verify_three_way_or_skip) ... ok
+
+----------------------------------------------------------------------
+Ran 101 tests in 129.028s
+
+OK
+{
+  "ENDED_AT": "2026-09-02T16:28:58Z",
+  "MECHANICAL_GATE": "PASS",
+  "RUN_ID": "RUN-BTC-007-20260902-01",
+  "STARTED_AT": "2026-09-02T16:27:23Z",
+  "canonical_run_unmodified": true,
+  "checked_in": {
+    "outputs/PERIOD_METRICS.csv": "2e99f85cbff25cd666e1db76485aa350f7837c54243698775baef8e4cf882f68",
+    "outputs/TRADES.csv": "eb1c54a5e7e390f5a7bb743497ac9c26f3c107971f6240402c0093cf4c09570e",
+    "outputs/UNCERTAINTY.csv": "c051bd7b246b06e021407aa305c8c4a22b33587e5ae64bc46441a634c2261c0e",
+    "outputs/YEARLY_METRICS.csv": "f5c7f6338446487899827d4c4d4f9712a61a21656246b23c0c6b9d6e7b17f6e9",
+    "report/H1_L6_SURVIVOR_AUDIT.md": "17213428d598e923a9bbb03fb761596bb5c96033eaef042d8f97b67aa365437b",
+    "result/RESULT.json": "d329ce9a11924f60c24b1b5e0ee1c4a3dd7cf9baed7ec492c11a2edc05f8a3db"
+  },
+  "data_sha256": "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103",
+  "disposition": "FREEZE_PROSPECTIVE_RECOMMENDED",
+  "expected": {
+    "outputs/PERIOD_METRICS.csv": "2e99f85cbff25cd666e1db76485aa350f7837c54243698775baef8e4cf882f68",
+    "outputs/TRADES.csv": "eb1c54a5e7e390f5a7bb743497ac9c26f3c107971f6240402c0093cf4c09570e",
+    "outputs/UNCERTAINTY.csv": "c051bd7b246b06e021407aa305c8c4a22b33587e5ae64bc46441a634c2261c0e",
+    "outputs/YEARLY_METRICS.csv": "f5c7f6338446487899827d4c4d4f9712a61a21656246b23c0c6b9d6e7b17f6e9",
+    "report/H1_L6_SURVIVOR_AUDIT.md": "17213428d598e923a9bbb03fb761596bb5c96033eaef042d8f97b67aa365437b",
+    "result/RESULT.json": "d329ce9a11924f60c24b1b5e0ee1c4a3dd7cf9baed7ec492c11a2edc05f8a3db"
+  },
+  "recomputed": {
+    "outputs/PERIOD_METRICS.csv": "2e99f85cbff25cd666e1db76485aa350f7837c54243698775baef8e4cf882f68",
+    "outputs/TRADES.csv": "eb1c54a5e7e390f5a7bb743497ac9c26f3c107971f6240402c0093cf4c09570e",
+    "outputs/UNCERTAINTY.csv": "c051bd7b246b06e021407aa305c8c4a22b33587e5ae64bc46441a634c2261c0e",
+    "outputs/YEARLY_METRICS.csv": "f5c7f6338446487899827d4c4d4f9712a61a21656246b23c0c6b9d6e7b17f6e9",
+    "report/H1_L6_SURVIVOR_AUDIT.md": "17213428d598e923a9bbb03fb761596bb5c96033eaef042d8f97b67aa365437b",
+    "result/RESULT.json": "d329ce9a11924f60c24b1b5e0ee1c4a3dd7cf9baed7ec492c11a2edc05f8a3db"
+  },
+  "spec_sha256": "d90a1fc844cb966431723cae7966c28895d93bb853a797bfa340d6e109a5992d",
+  "three_way": {
+    "checked_in_vs_manifest": {
+      "mismatches": [],
+      "ok": true
+    },
+    "checked_in_vs_recomputed": {
+      "mismatches": [],
+      "ok": true
+    },
+    "recomputed_vs_manifest": {
+      "mismatches": [],
+      "ok": true
+    }
+  }
+}
