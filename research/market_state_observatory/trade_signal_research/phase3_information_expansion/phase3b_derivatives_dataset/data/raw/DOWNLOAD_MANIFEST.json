@@ -1,0 +1,78 @@
+{
+  "downloaded_at_utc": "2026-08-30T16:46:48Z",
+  "panel_end": "2026-08-29",
+  "rest_funding": {
+    "endpoint": "https://fapi.binance.com/fapi/v1/fundingRate",
+    "symbol": "BTCUSDT",
+    "pre_status": "skipped_exists",
+    "pre_n": 384,
+    "tail_status": "skipped_exists",
+    "tail_n": 181,
+    "pre_path": "/Users/valeria/Documents/tikiaventura/research/market_state_observatory/trade_signal_research/phase3_information_expansion/phase3b_derivatives_dataset/data/raw/rest/funding_pre_vision.json",
+    "tail_path": "/Users/valeria/Documents/tikiaventura/research/market_state_observatory/trade_signal_research/phase3_information_expansion/phase3b_derivatives_dataset/data/raw/rest/funding_aug2026.json",
+    "pre_first": 1568102400000,
+    "pre_last": 1579132800000,
+    "tail_first": 1782864000000,
+    "tail_last": 1788048000000,
+    "downloaded_at_utc": "2026-08-30T16:46:48Z"
+  },
+  "vision_counts": {
+    "funding_monthly": {
+      "n_zip": 79,
+      "first": "data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-01.zip",
+      "last": "data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-07.zip"
+    },
+    "funding_daily": {
+      "n_zip": 0,
+      "first": null,
+      "last": null
+    },
+    "premium_1h_monthly": {
+      "n_zip": 79,
+      "first": "data/futures/um/monthly/premiumIndexKlines/BTCUSDT/1h/BTCUSDT-1h-2020-01.zip",
+      "last": "data/futures/um/monthly/premiumIndexKlines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip"
+    },
+    "premium_1h_daily": {
+      "n_zip": 2435,
+      "first": "data/futures/um/daily/premiumIndexKlines/BTCUSDT/1h/BTCUSDT-1h-2019-12-24.zip",
+      "last": "data/futures/um/daily/premiumIndexKlines/BTCUSDT/1h/BTCUSDT-1h-2026-08-29.zip"
+    },
+    "perp_1d_monthly": {
+      "n_zip": 79,
+      "first": "data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-01.zip",
+      "last": "data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2026-07.zip"
+    },
+    "perp_1d_daily": {
+      "n_zip": 2434,
+      "first": "data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2019-12-31.zip",
+      "last": "data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-08-29.zip"
+    },
+    "metrics_daily": {
+      "n_zip": 2189,
+      "first": "data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2020-09-01.zip",
+      "last": "data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-2026-08-29.zip"
+    },
+    "spot_1d_monthly": {
+      "n_zip": 108,
+      "first": "data/spot/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2017-08.zip",
+      "last": "data/spot/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2026-07.zip"
+    },
+    "spot_1d_daily": {
+      "n_zip": 3300,
+      "first": "data/spot/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2017-08-17.zip",
+      "last": "data/spot/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-08-29.zip"
+    },
+    "mark_1h_monthly": {
+      "n_zip": 79,
+      "first": "data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2020-01.zip",
+      "last": "data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip"
+    },
+    "index_1h_monthly": {
+      "n_zip": 79,
+      "first": "data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2020-01.zip",
+      "last": "data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip"
+    }
+  },
+  "n_zip_attempts": 2624,
+  "n_zip_errors": 0
+}

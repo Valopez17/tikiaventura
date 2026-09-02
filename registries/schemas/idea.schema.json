@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "idea.schema.json",
+  "title": "Idea",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["idea_id", "recorded_at", "summary", "lifecycle_status"],
+  "properties": {
+    "idea_id": { "type": "string", "pattern": "^IDEA-" },
+    "recorded_at": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "source": { "type": "string" },
+    "lifecycle_status": {
+      "type": "string",
+      "enum": ["BACKLOG", "ACTIVE", "BLOCKED", "INVALIDATED", "INSUFFICIENT", "DISCARDED", "DEEPEN", "FROZEN", "PROSPECTIVE_MONITORING", "RETIRED"]
+    }
+  }
+}

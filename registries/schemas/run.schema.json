@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run.schema.json",
+  "title": "Run",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "experiment_id",
+    "recorded_at",
+    "immutable"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "pattern": "^RUN-" },
+    "experiment_id": { "type": "string", "pattern": "^EXP-" },
+    "recorded_at": { "type": "string", "minLength": 1 },
+    "spec_hash": { "type": "string" },
+    "code_commit": { "type": "string" },
+    "command": { "type": "string" },
+    "mechanical_gate": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "INSUFFICIENT", "BLOCKED"]
+    },
+    "immutable": { "type": "boolean", "const": true }
+  }
+}

@@ -1,0 +1,7 @@
+Read-only data source (do not copy or modify):
+
+research/papers/hsieh_2025_state_transition_momentum/data/processed/crypto_weekly_panel.csv
+
+This Observatory does not download CoinMarketCap.
+This Observatory does not modify the Hsieh panel.
+Current "as-of" date in v1 is the last Friday in that panel, not live market time.

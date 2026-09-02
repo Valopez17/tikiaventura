@@ -1,0 +1,22 @@
+{"error_id":"E-01","recorded_at":"2026-09-02","tema":"Hash/provenance del dataset ausente","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-02","recorded_at":"2026-09-02","tema":"Extreme lookback por filas ≠ horas","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-03","recorded_at":"2026-09-02","tema":"Survivor gate permisivo","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-04","recorded_at":"2026-09-02","tema":"Extreme sin equity MTM","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-05","recorded_at":"2026-09-02","tema":"Calendar elegido con peek","estado":"PERMANENT_DISCLOSURE","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-06","recorded_at":"2026-09-02","tema":"Uso de PROBADA/OOS","estado":"CLOSED","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-07","recorded_at":"2026-09-02","tema":"Folklore distinto a regla Calendar","estado":"PERMANENT_DISCLOSURE","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-08","recorded_at":"2026-09-02","tema":"N=11 interpretado con exceso","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-09","recorded_at":"2026-09-02","tema":"Producto adelantado al descubrimiento","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.3"}
+{"error_id":"E-10","recorded_at":"2026-09-02","tema":"Scan exploratorio confundido con confirmación","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-11","recorded_at":"2026-09-02","tema":"Niveles 2/3 omitidos y Nivel 4 de método inventado","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-12","recorded_at":"2026-09-02","tema":"Manifest, environment y run provenance ausentes","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-13","recorded_at":"2026-09-02","tema":"Roadmap con tareas demasiado grandes","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-14","recorded_at":"2026-09-02","tema":"Documento superseded conservaba norma de alertas","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-15","recorded_at":"2026-09-02","tema":"Fronteras/purge no definidos","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-16","recorded_at":"2026-09-02","tema":"10 bps RT tratado como supuesto canónico","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-17","recorded_at":"2026-09-02","tema":"Estado mutable sin registry append-only","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4; registries created in R0-A"}
+{"error_id":"E-18","recorded_at":"2026-09-02","tema":"Utilidad de alerta no declarada","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-19","recorded_at":"2026-09-02","tema":"Dataset común vive bajo proyecto tsmom","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-20","recorded_at":"2026-09-02","tema":"Outputs genéricos pueden colisionar/sobrescribirse","estado":"OPEN","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-21","recorded_at":"2026-09-02","tema":"Atomización excesiva de tareas que no reduce un riesgo material","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
+{"error_id":"E-22","recorded_at":"2026-09-02","tema":"Tratar el OS documental como el producto en lugar de un medio para descubrir edges","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}

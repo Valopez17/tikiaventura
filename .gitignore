@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+
+# GitHub 100MB hard limit / 50MB warning — keep on disk, do not track
+btc_tsmom_replication/btcusdt_5m.csv
+research/papers/hsieh_2025_state_transition_momentum/data/processed/crypto_weekly_panel.csv

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hypothesis.schema.json",
+  "title": "Hypothesis",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "hypothesis_id",
+    "version",
+    "recorded_at",
+    "pregunta",
+    "observable_en_t",
+    "control",
+    "falsificador",
+    "evidence_level",
+    "lifecycle_status",
+    "freeze_status",
+    "selection_contaminated"
+  ],
+  "properties": {
+    "hypothesis_id": { "type": "string", "pattern": "^HYP-" },
+    "version": { "type": "string", "minLength": 1 },
+    "recorded_at": { "type": "string", "minLength": 1 },
+    "pregunta": { "type": "string", "minLength": 1 },
+    "tipo_alerta": { "type": "string" },
+    "decision_apoyada": { "type": "string" },
+    "fuente": { "type": "string" },
+    "mecanismo": { "type": "string" },
+    "observable_en_t": { "type": "string", "minLength": 1 },
+    "target": { "type": "string" },
+    "horizonte": { "type": "string" },
+    "control": { "type": "string", "minLength": 1 },
+    "falsificador": { "type": "string", "minLength": 1 },
+    "datos": { "type": "string" },
+    "evidence_level": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3", "L4", "L5"]
+    },
+    "lifecycle_status": {
+      "type": "string",
+      "enum": ["BACKLOG", "ACTIVE", "BLOCKED", "INVALIDATED", "INSUFFICIENT", "DISCARDED", "DEEPEN", "FROZEN", "PROSPECTIVE_MONITORING", "RETIRED"]
+    },
+    "freeze_status": { "type": "string", "enum": ["UNFROZEN", "FROZEN"] },
+    "selection_contaminated": { "type": "boolean" }
+  }
+}

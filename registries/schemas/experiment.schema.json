@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "experiment.schema.json",
+  "title": "Experiment",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "experiment_id",
+    "hypothesis_id",
+    "experiment_type",
+    "spec_status",
+    "recorded_at"
+  ],
+  "properties": {
+    "experiment_id": { "type": "string", "pattern": "^EXP-" },
+    "hypothesis_id": { "type": "string", "pattern": "^HYP-" },
+    "hypothesis_version": { "type": "string" },
+    "experiment_type": {
+      "type": "string",
+      "enum": ["LANDSCAPE", "SCAN", "CONFIRMATORY", "ROBUSTNESS", "PROSPECTIVE", "REPRODUCTION"]
+    },
+    "spec_status": { "type": "string", "minLength": 1 },
+    "spec_hash": { "type": "string" },
+    "dataset_id": { "type": "string" },
+    "recorded_at": { "type": "string", "minLength": 1 }
+  }
+}

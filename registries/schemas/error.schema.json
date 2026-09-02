@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error.schema.json",
+  "title": "Error",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["error_id", "recorded_at", "tema", "estado", "source_ref"],
+  "properties": {
+    "error_id": { "type": "string", "pattern": "^E-" },
+    "recorded_at": { "type": "string", "minLength": 1 },
+    "tema": { "type": "string", "minLength": 1 },
+    "estado": {
+      "type": "string",
+      "enum": ["OPEN", "FIXED_PENDING_VERIFICATION", "CLOSED", "PERMANENT_DISCLOSURE"]
+    },
+    "source_ref": { "type": "string", "minLength": 1 }
+  }
+}
