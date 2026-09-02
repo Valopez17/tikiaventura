@@ -13,6 +13,8 @@ Append-only JSONL. Never edit or delete a past line. Supersede with a new line (
 
 R0-A seeds only IDs that already exist in v4.1 §6 (decisions and errors), as references, without copying research results.
 
-`ideas.jsonl`, `hypotheses.jsonl`, `experiments.jsonl`, and `runs.jsonl` are empty. No legacy HYP/EXP/RUN ids are invented.
+R0-C appends the first hypothesis / experiment / run rows: HYP-BTC-001…004 and EXP-BTC-001…004 are legacy family references (no historical RUN-IDs). HYP-BTC-005 / EXP-BTC-005 / RUN-BTC-005-20260902-01 is the synthetic reproducibility harness.
+
+`ideas.jsonl` remains empty.
 
 Validate: `python3 registries/validate_registries.py`

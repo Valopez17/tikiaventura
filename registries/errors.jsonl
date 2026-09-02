@@ -22,4 +22,5 @@
 {"error_id":"E-22","recorded_at":"2026-09-02","tema":"Tratar el OS documental como el producto en lugar de un medio para descubrir edges","estado":"FIXED_PENDING_VERIFICATION","source_ref":"BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md §6.4"}
 {"error_id":"E-01","recorded_at":"2026-09-02","tema":"Dataset SHA-256 now in data/catalog/results/DATA_AUDIT.json; provider/retrieved_at still UNKNOWN","estado":"OPEN","source_ref":"governance/R0-B_RECEIPT.md"}
 {"error_id":"E-02","recorded_at":"2026-09-02","tema":"Exact timestamp primitive tested; Extreme strategy rerun not done","estado":"FIXED_PENDING_VERIFICATION","source_ref":"governance/R0-B_RECEIPT.md"}
+{"error_id":"E-12","recorded_at":"2026-09-02","tema":"EXP-BTC-005 canonical run supplies Appendix C manifest + environment + provenance for the synthetic harness only; Calendar/Extreme/Breakout/Vol strategy runs still lack manifests","estado":"FIXED_PENDING_VERIFICATION","source_ref":"governance/R0-C_RECEIPT.md; experiments/EXP-BTC-005/RUN-BTC-005-20260902-01/MANIFEST.json"}
 
