@@ -1,0 +1,96 @@
+{
+  "spec": "data/catalog/DATA_AUDIT_SPEC.md",
+  "dataset_id": "BTCUSDT_SPOT_1H_LEGACY",
+  "path": "btc_tsmom_replication/btcusdt_1h.csv",
+  "mechanical_gate": "PASS",
+  "stop_reasons": [],
+  "KNOWN": {
+    "sha256": "77948c076a07790739e6072e8c62316a672a389e80c6693be10a18c5461cc103",
+    "size_bytes": 7328882,
+    "n_rows": 78986,
+    "n_header_lines_on_disk": 1,
+    "columns": [
+      "timestamp_utc",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume"
+    ],
+    "dtypes": {
+      "timestamp_utc": "object",
+      "open": "float64",
+      "high": "float64",
+      "low": "float64",
+      "close": "float64",
+      "volume": "float64"
+    },
+    "timestamp_column": "timestamp_utc",
+    "timestamp_parsed_as": "UTC (pandas utc=True); naive strings have no Z/offset",
+    "naive_strings_contain_offset": false,
+    "n_unparsed_timestamps": 0,
+    "t_min_utc": "2017-08-17 04:00:00+00:00",
+    "t_max_utc": "2026-08-26 13:00:00+00:00",
+    "unique_timestamps": true,
+    "chronological": true,
+    "n_duplicate_timestamps": 0,
+    "n_expected_hourly_bars_inclusive": 79114,
+    "n_missing_hours": 128,
+    "n_unexpected_timestamps": 0,
+    "n_gap_runs": 28,
+    "gap_length_hours_distribution": {
+      "1": 9,
+      "2": 5,
+      "3": 3,
+      "4": 2,
+      "5": 1,
+      "6": 2,
+      "7": 2,
+      "8": 1,
+      "10": 2,
+      "33": 1
+    },
+    "n_nonfinite_ohlc": 0,
+    "n_nonpositive_ohlc": 0,
+    "n_high_lt_low": 0,
+    "n_open_outside_low_high": 0,
+    "n_close_outside_low_high": 0,
+    "n_invalid_volume": 0,
+    "last_row_timestamp_utc": "2026-08-26 13:00:00+00:00",
+    "last_row_ohlc_complete": true,
+    "units_observed": "prices float; volume float (base-asset units if Binance kline)"
+  },
+  "DOCUMENTED_LEGACY_CLAIM": {
+    "source": "Binance BTCUSDT Spot",
+    "interval": "1h",
+    "n_bars": 78986,
+    "t_min": "2017-08-17 04:00:00 UTC",
+    "t_max": "2026-08-26 13:00:00 UTC",
+    "unique_and_ordered": true,
+    "ohlc_valid": true,
+    "missing_hours": 128,
+    "sha256": "TBC",
+    "reproduced": {
+      "n_bars": true,
+      "t_min": true,
+      "t_max": true,
+      "unique_and_ordered": true,
+      "ohlc_valid": true,
+      "missing_hours": true,
+      "sha256": false
+    }
+  },
+  "UNKNOWN": {
+    "provider_endpoint": null,
+    "retrieved_at_utc": null,
+    "request_parameters": null,
+    "transform_code_commit": null,
+    "inclusive_exclusive_download_window": null,
+    "whether_a_later_closed_bar_existed_at_retrieval": null
+  },
+  "notes": [
+    "Each CSV row is treated as a completed hourly bar (historical kline dump). That does not reconstruct retrieved_at.",
+    "Naive timestamp_utc strings are interpreted as UTC clock time, not a local exchange timezone.",
+    "Gaps are missing expected hours on the UTC hourly grid from t_min to t_max inclusive. Prices were not imputed."
+  ]
+}
