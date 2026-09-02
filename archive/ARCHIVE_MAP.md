@@ -34,6 +34,19 @@ Classifications below are those of `BTC_STRATEGY_RESEARCH_AUDIT_PACK_v4_1.md` §
 
 IDs such as HYP-BTC-001 / EXP-BTC-001 are **not** invented here. Assigning them to legacy work is R0-C.
 
+## R0-C ID assignment (references only; numbers not recalculated)
+
+Classifications below are labels copied from v4.1 §5. They are not new results. No historical RUN-IDs are invented. No family was rerun.
+
+| Family | Hypothesis | Experiment | v4.1 classification (label only) | Points to |
+|---|---|---|---|---|
+| Weekly Calendar | HYP-BTC-001 | EXP-BTC-001 | L2 CALCULATED; DEEPEN_METHOD / UNFROZEN; selection_contaminated | `research/market_state_observatory/trade_signal_research/strategy_lab/phase3_weekly_calendar_anomaly/` + rector §5.1 |
+| Extreme Move | HYP-BTC-002 | EXP-BTC-002 | L2 CALCULATED, afectado; INVALIDATED (E-02, E-03, E-04) | `.../phase4_extreme_move_reversal/` and `.../phase4b_extreme_move_audit_fix/` + rector §5.2 |
+| Breakout | HYP-BTC-003 | EXP-BTC-003 | L0 IDEA / spec draft; BACKLOG; not authorized | `.../phase5_breakout_continuation/` + rector §5.3. Artefacts exist; not promoted. |
+| Volatility Compression | HYP-BTC-004 | EXP-BTC-004 | L0 IDEA / spec draft; BACKLOG | **NOT FOUND** (no implementation folder). No artefacts invented. Rector §5.4. |
+
+Synthetic reproducibility harness (not a trading edge; not a §5 family): HYP-BTC-005 / EXP-BTC-005 / RUN-BTC-005-20260902-01 under `experiments/EXP-BTC-005/`.
+
 ## Known tension (not resolved in R0-A)
 
 v4.1 §5.3 classifies Breakout as L0 / SPEC next, not SCAN. Laboratory artefacts already exist under `phase5_breakout_continuation/`. R0-A records both facts and does not reclassify, recalculate, or delete.

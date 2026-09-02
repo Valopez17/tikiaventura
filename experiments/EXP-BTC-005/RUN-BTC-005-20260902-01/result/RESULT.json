@@ -1,0 +1,20 @@
+{
+  "data_path": "tests/fixtures/e02_gap_hours.csv",
+  "data_sha256": "44f72413970da754428e887cfd068e26866f8e2058b17c4b42abab4b1350bffd",
+  "duplicates": 0,
+  "experiment_id": "EXP-BTC-005",
+  "gap_runs": 1,
+  "gaps": 1,
+  "input_rows": 6,
+  "mechanical_gate": "PASS",
+  "missing_hours": [
+    "2020-01-01 03:00:00"
+  ],
+  "n_elapsed_eq_1h": 4,
+  "n_elapsed_gt_1h": 1,
+  "n_returns": 5,
+  "not_a_trading_edge": true,
+  "role": "REPRODUCIBILITY_HARNESS",
+  "spec_path": "experiments/EXP-BTC-005/SPEC.md",
+  "spec_sha256": "b17c120b015632167b5663d603f757cff8d8c878410a8ff5b6c60b5514697ff4"
+}

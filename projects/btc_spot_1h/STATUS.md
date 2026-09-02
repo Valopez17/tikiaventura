@@ -7,8 +7,8 @@
 | Field | Value |
 |---|---|
 | Stage | R0 — operating system |
-| Last closed Cursor task | R0-B-AUDIT-FIX |
-| Next Cursor task | none until Valita names a TASK-ID (R0-C is next in the roadmap, not started) |
+| Last closed Cursor task | R0-C |
+| Next Cursor task | none until Valita names a TASK-ID |
 | Active computational experiment | none |
 | Active live alert | none |
 | Frozen rule | none |
