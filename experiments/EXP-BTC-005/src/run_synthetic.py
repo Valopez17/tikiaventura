@@ -8,6 +8,7 @@ import csv
 import hashlib
 import json
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -22,6 +23,14 @@ DATA_PATH = REPO / "tests" / "fixtures" / "e02_gap_hours.csv"
 CANONICAL_RUN_ID = "RUN-BTC-005-20260902-01"
 CANONICAL_RUN_DIR = EXP_DIR / CANONICAL_RUN_ID
 FORBIDDEN_DATA = REPO / "btc_tsmom_replication" / "btcusdt_1h.csv"
+CODE_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+REQUIRED_HARNESS_PATHS = (
+    "experiments/EXP-BTC-005/src/run_synthetic.py",
+    "experiments/EXP-BTC-005/SPEC.md",
+    "tests/fixtures/e02_gap_hours.csv",
+)
+GRANDFATHER_ERROR_ID = "E-23"
+INCIDENT_CODE_COMMIT = "426ca78062aaf600076182d6dab6daf98e200472"
 
 EXPECTED_DATA_SHA256 = "44f72413970da754428e887cfd068e26866f8e2058b17c4b42abab4b1350bffd"
 EXPECTED_ROWS = 6
@@ -57,16 +66,91 @@ def fmt_ts(ts: datetime) -> str:
 
 
 def git_head() -> str:
+    """Return the full SHA of HEAD. Raises if git cannot produce a 40-char SHA."""
     try:
         out = subprocess.check_output(
             ["git", "rev-parse", "HEAD"],
             cwd=REPO,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
             text=True,
         )
-        return out.strip()
-    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
-        return "UNKNOWN"
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError) as exc:
+        raise RuntimeError(f"CODE_COMMIT requires git rev-parse HEAD: {exc}") from exc
+    sha = out.strip()
+    if not CODE_COMMIT_RE.fullmatch(sha):
+        raise RuntimeError(f"CODE_COMMIT must be a 40-char lowercase hex SHA, got {sha!r}")
+    return sha
+
+
+def git_object_exists(sha: str) -> bool:
+    proc = subprocess.run(
+        ["git", "cat-file", "-e", sha],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode == 0
+
+
+def commit_has_path(sha: str, relpath: str) -> bool:
+    proc = subprocess.run(
+        ["git", "cat-file", "-e", f"{sha}:{relpath}"],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode == 0
+
+
+def paths_missing_from_commit(sha: str, relpaths: tuple[str, ...] | list[str]) -> list[str]:
+    return [rel for rel in relpaths if not commit_has_path(sha, rel)]
+
+
+def harness_worktree_dirty() -> list[str]:
+    proc = subprocess.run(
+        ["git", "status", "--porcelain", "--", *REQUIRED_HARNESS_PATHS],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"git status failed: {proc.stderr.strip()}")
+    return [line for line in proc.stdout.splitlines() if line.strip()]
+
+
+def resolve_code_commit() -> str:
+    """HEAD SHA that actually contains the executed harness files, with a clean worktree."""
+    sha = git_head()
+    if not git_object_exists(sha):
+        raise RuntimeError(f"CODE_COMMIT {sha} is not a git object")
+    missing = paths_missing_from_commit(sha, REQUIRED_HARNESS_PATHS)
+    if missing:
+        raise RuntimeError(
+            "CODE_COMMIT does not contain executed harness code: "
+            + f"{sha} missing {missing}. Commit runner/spec/fixture before materializing a run."
+        )
+    dirty = harness_worktree_dirty()
+    if dirty:
+        raise RuntimeError(
+            "refuse to materialize with uncommitted harness/runner/spec/fixture changes: "
+            + "; ".join(dirty)
+        )
+    return sha
+
+
+def run_dir_for(run_id: str) -> Path:
+    return EXP_DIR / run_id
+
+
+def output_hashes_from_run(run_id: str) -> dict[str, str]:
+    manifest_path = run_dir_for(run_id) / "MANIFEST.json"
+    if not manifest_path.is_file():
+        raise FileNotFoundError(f"run manifest missing: {manifest_path}")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    return {item["path"]: item["sha256"] for item in manifest["OUTPUT_FILES"]}
 
 
 def environment() -> dict:
@@ -239,6 +323,7 @@ def write_manifest(
     output_hashes: dict[str, str],
     started_at: str,
     ended_at: str,
+    code_commit: str,
 ) -> None:
     manifest = {
         "RUN_ID": run_id,
@@ -246,7 +331,7 @@ def write_manifest(
         "STARTED_AT": started_at,
         "ENDED_AT": ended_at,
         "SPEC_HASH": computed["spec_sha256"],
-        "CODE_COMMIT": git_head(),
+        "CODE_COMMIT": code_commit,
         "COMMAND": command,
         "ENVIRONMENT": environment(),
         "RANDOM_SEED": None,
@@ -260,7 +345,11 @@ def write_manifest(
         "OUTPUT_FILES": [
             {"path": rel, "sha256": digest} for rel, digest in output_hashes.items()
         ],
-        "TESTS": "python3 -m unittest tests.test_r0c_synthetic_repro tests.test_r0c_legacy_ids -v",
+        "TESTS": (
+            "python3 -m unittest tests.test_r0c_synthetic_repro "
+            "tests.test_r0c_legacy_ids tests.test_r0c_code_commit_contains_harness "
+            "tests.test_r0c_commit_a_repro -v"
+        ),
         "WARNINGS": computed["warnings"],
         "MECHANICAL_GATE": computed["mechanical_gate"],
         "role": "REPRODUCIBILITY_HARNESS",
@@ -324,7 +413,7 @@ def write_receipt(
             "",
             "BLOCKERS: none for this harness. Live 1h CSV not used. E-02 economic impact not measured.",
             "",
-            "REGISTERS UPDATED: recorded separately in registries/runs.jsonl by R0-C.",
+            "REGISTERS UPDATED: recorded separately in registries/runs.jsonl.",
             "",
             "not_a_trading_edge: true",
             "",
@@ -334,75 +423,126 @@ def write_receipt(
 
 
 def canonical_output_hashes() -> dict[str, str]:
-    manifest_path = CANONICAL_RUN_DIR / "MANIFEST.json"
-    if not manifest_path.is_file():
-        raise FileNotFoundError(f"canonical manifest missing: {manifest_path}")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    return {item["path"]: item["sha256"] for item in manifest["OUTPUT_FILES"]}
+    return output_hashes_from_run(CANONICAL_RUN_ID)
 
 
-def verify() -> int:
-    started = utc_now_iso()
+def observe_hash_contract() -> tuple[dict, dict[str, str]]:
     computed = compute(DATA_PATH, SPEC_PATH)
-    tmp = Path(tempfile.mkdtemp(prefix="exp-btc-005-verify-"))
+    tmp = Path(tempfile.mkdtemp(prefix="exp-btc-005-observe-"))
     try:
         hashes = write_run_tree(tmp, computed)
-        expected = canonical_output_hashes()
-        mismatches = []
-        for rel in HASH_CONTRACT_FILES:
-            got = hashes.get(rel)
-            want = expected.get(rel)
-            if got != want:
-                mismatches.append({"path": rel, "expected": want, "observed": got})
-        ended = utc_now_iso()
-        report = {
-            "STARTED_AT": started,
-            "ENDED_AT": ended,
-            "MECHANICAL_GATE": "PASS" if not mismatches and computed["mechanical_gate"] == "PASS" else "FAIL",
-            "mismatches": mismatches,
-            "observed": hashes,
-            "expected": expected,
-            "spec_sha256": computed["spec_sha256"],
-            "data_sha256": computed["data_sha256"],
-        }
-        print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
-        return 0 if report["MECHANICAL_GATE"] == "PASS" else 1
+        return computed, hashes
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def compute_hashes() -> int:
+    """Recompute hash-contract files. Does not require a later run folder."""
+    computed, hashes = observe_hash_contract()
+    report = {
+        "MECHANICAL_GATE": computed["mechanical_gate"],
+        "observed": hashes,
+        "spec_sha256": computed["spec_sha256"],
+        "data_sha256": computed["data_sha256"],
+        "data_path": computed["data_path"],
+        "spec_path": computed["spec_path"],
+    }
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
+    return 0 if computed["mechanical_gate"] == "PASS" else 1
+
+
+def verify(run_id: str) -> int:
+    started = utc_now_iso()
+    computed, hashes = observe_hash_contract()
+    expected = output_hashes_from_run(run_id)
+    mismatches = []
+    for rel in HASH_CONTRACT_FILES:
+        got = hashes.get(rel)
+        want = expected.get(rel)
+        if got != want:
+            mismatches.append({"path": rel, "expected": want, "observed": got})
+    ended = utc_now_iso()
+    report = {
+        "STARTED_AT": started,
+        "ENDED_AT": ended,
+        "RUN_ID": run_id,
+        "MECHANICAL_GATE": "PASS" if not mismatches and computed["mechanical_gate"] == "PASS" else "FAIL",
+        "mismatches": mismatches,
+        "observed": hashes,
+        "expected": expected,
+        "spec_sha256": computed["spec_sha256"],
+        "data_sha256": computed["data_sha256"],
+    }
+    print(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=True))
+    return 0 if report["MECHANICAL_GATE"] == "PASS" else 1
+
+
 def materialize(run_id: str, command: str) -> int:
-    run_dir = EXP_DIR / run_id
+    run_dir = run_dir_for(run_id)
     if run_dir.exists():
         print(
             f"REFUSE overwrite of existing run folder: {run_dir} (DEC-005 immutable outputs)",
             file=sys.stderr,
         )
         return 2
+    try:
+        code_commit = resolve_code_commit()
+    except RuntimeError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
     started = utc_now_iso()
     computed = compute(DATA_PATH, SPEC_PATH)
     run_dir.mkdir(parents=True, exist_ok=False)
     hashes = write_run_tree(run_dir, computed)
     ended = utc_now_iso()
-    write_manifest(run_dir, run_id, command, computed, hashes, started, ended)
+    write_manifest(run_dir, run_id, command, computed, hashes, started, ended, code_commit)
     write_receipt(run_dir, run_id, command, computed, hashes)
-    print(json.dumps({"run_dir": str(run_dir), "hashes": hashes, "MECHANICAL_GATE": computed["mechanical_gate"]}, indent=2))
+    print(
+        json.dumps(
+            {
+                "run_dir": str(run_dir),
+                "run_id": run_id,
+                "CODE_COMMIT": code_commit,
+                "hashes": hashes,
+                "MECHANICAL_GATE": computed["mechanical_gate"],
+            },
+            indent=2,
+        )
+    )
     return 0 if computed["mechanical_gate"] == "PASS" else 1
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="EXP-BTC-005 reproducibility harness (not a strategy)")
-    parser.add_argument("--verify", action="store_true", help="recompute in temp dir and compare to canonical hashes")
-    parser.add_argument("--run-id", help="write a new immutable run folder under experiments/EXP-BTC-005/")
+    parser.add_argument(
+        "--verify",
+        action="store_true",
+        help="recompute in temp dir and compare to a run's MANIFEST hashes (default: RUN-BTC-005-20260902-01)",
+    )
+    parser.add_argument(
+        "--run-id",
+        help="with --verify: which run to compare against; without --verify: write a new immutable run folder",
+    )
+    parser.add_argument(
+        "--compute-hashes",
+        action="store_true",
+        help="recompute hash-contract files and print SHA-256 (no run folder required)",
+    )
     args = parser.parse_args(argv)
 
-    if args.verify and args.run_id:
-        print("use either --verify or --run-id, not both", file=sys.stderr)
-        return 2
+    if args.compute_hashes:
+        if args.verify or args.run_id:
+            print("use --compute-hashes alone", file=sys.stderr)
+            return 2
+        return compute_hashes()
     if args.verify:
-        return verify()
+        run_id = args.run_id or CANONICAL_RUN_ID
+        if args.run_id and not args.run_id.startswith("RUN-"):
+            print("run-id must start with RUN-", file=sys.stderr)
+            return 2
+        return verify(run_id)
     if not args.run_id:
-        print("required: --verify or --run-id RUN-...", file=sys.stderr)
+        print("required: --verify, --compute-hashes, or --run-id RUN-...", file=sys.stderr)
         return 2
     if not args.run_id.startswith("RUN-"):
         print("run-id must start with RUN-", file=sys.stderr)

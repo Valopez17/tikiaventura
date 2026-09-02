@@ -13,7 +13,7 @@ Append-only JSONL. Never edit or delete a past line. Supersede with a new line (
 
 R0-A seeds only IDs that already exist in v4.1 §6 (decisions and errors), as references, without copying research results.
 
-R0-C appends the first hypothesis / experiment / run rows: HYP-BTC-001…004 and EXP-BTC-001…004 are legacy family references (no historical RUN-IDs). HYP-BTC-005 / EXP-BTC-005 / RUN-BTC-005-20260902-01 is the synthetic reproducibility harness.
+R0-C appends the first hypothesis / experiment / run rows: HYP-BTC-001…004 and EXP-BTC-001…004 are legacy family references (no historical RUN-IDs). HYP-BTC-005 / EXP-BTC-005 / RUN-BTC-005-20260902-01 is the synthetic reproducibility harness. R0-C-PROVENANCE-FIX appends E-23 and RUN-BTC-005-20260902-02 (provenance reproduction; RUN-01 is immutable).
 
 `ideas.jsonl` remains empty.
 

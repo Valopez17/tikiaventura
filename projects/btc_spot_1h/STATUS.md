@@ -7,7 +7,7 @@
 | Field | Value |
 |---|---|
 | Stage | R0 — operating system |
-| Last closed Cursor task | R0-C |
+| Last closed Cursor task | R0-C-PROVENANCE-FIX |
 | Next Cursor task | none until Valita names a TASK-ID |
 | Active computational experiment | none |
 | Active live alert | none |
