@@ -56,7 +56,7 @@ def archive_commit_to(sha: str, dest: Path) -> None:
         stderr=subprocess.PIPE,
     )
     with tarfile.open(fileobj=BytesIO(proc.stdout), mode="r:") as tar:
-        tar.extractall(dest, filter="data")
+        tar.extractall(dest)
 
 
 class CommitAReproTests(unittest.TestCase):
