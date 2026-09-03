@@ -1,6 +1,6 @@
 # BTC spot 1h — live snapshot
 
-**As of:** 2026-09-03  
+**As of:** 2026-09-03
 **Source of rules:** `governance/ACTIVE_RECTOR.md`  
 **This file** holds mutable operational state so the rector document is not rewritten for routine status.
 

@@ -1,8 +1,8 @@
 # EXT-H01 / EXT-H02 closeout — H1 audit and freeze
 
-TASK_ID: EXT-C07  
-Date: 2026-09-03  
-Base: `85df43b57e3a87c5e95412cd7c70bc456e0924fb` (PR #4 merged)  
+TASK_ID: EXT-C07
+Date: 2026-09-03
+Base: `85df43b57e3a87c5e95412cd7c70bc456e0924fb` (PR #4 merged)
 OBJECTIVE: Append-only record of EXT-H01 audit result and human decision EXT-H02. Governance closeout; not a new experiment.
 
 This record does not claim a confirmed edge, does not authorize capital, does not change HYP-BTC-002, and does not modify the canonical run.
